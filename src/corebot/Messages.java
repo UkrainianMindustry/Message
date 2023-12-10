@@ -41,7 +41,7 @@ public class Messages extends ListenerAdapter{
     private static final String prefix = "!";
     private static final int scamAutobanLimit = 3, pingSpamLimit = 20, minModStars = 10, naughtyTimeoutMins = 20;
     private static final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-    private static final String[] warningStrings = {"once", "twice", "thrice", "too many times"};
+    private static final String[] warningStrings = {"вперше", "вдруге", "втретє", "надто багато разів"};
 
     private static final String
     cyrillicFrom = "абсдефгнигклмпоркгзтюушхуз",
@@ -132,14 +132,13 @@ public class Messages extends ListenerAdapter{
     mapsChannel, moderationChannel, schematicsChannel, baseSchematicsChannel,
     logChannel, joinChannel, videosChannel, streamsChannel, testingChannel,
     alertsChannel, curatedSchematicsChannel, botsChannel;
-    public Emote aaaaa;
 
     public Role modderRole;
 
     LongSeq schematicChannels = new LongSeq();
 
     public Messages(){
-        String token = System.getenv("CORE_BOT_TOKEN");
+        String token = "токен_бота"; //так, воно працює
 
         register();
 
@@ -151,7 +150,7 @@ public class Messages extends ListenerAdapter{
 
             loadChannels();
 
-            Log.info("Discord bot up.");
+            Log.info("Hello There!");
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -163,27 +162,26 @@ public class Messages extends ListenerAdapter{
 
     void loadChannels(){
         //all guilds and channels are loaded here for faster lookup
-        guild = jda.getGuildById(391020510269669376L);
+        guild = jda.getGuildById(1183137346745553087L);
 
-        modderRole = guild.getRoleById(965691639811149865L);
+        modderRole = guild.getRoleById(1183145155440685196L);
 
-        pluginChannel = channel(617833229973717032L);
-        crashReportChannel = channel(467033526018113546L);
-        announcementsChannel = channel(391020997098340352L);
-        artChannel = channel(754011833928515664L);
-        mapsChannel = channel(416719902641225732L);
-        moderationChannel = channel(488049830275579906L);
-        schematicsChannel = channel(640604827344306207L);
-        baseSchematicsChannel = channel(718536034127839252L);
-        logChannel = channel(568416809964011531L);
-        joinChannel = channel(832688792338038844L);
-        streamsChannel = channel(833420066238103604L);
-        videosChannel = channel(833826797048692747L);
-        testingChannel = channel(432984286099144706L);
-        alertsChannel = channel(864139464401223730L);
-        curatedSchematicsChannel = channel(878022862915653723L);
-        botsChannel = channel(414179246693679124L);
-        aaaaa = guild.getEmotesByName("alphaaaaaaaa", true).get(0);
+        pluginChannel = channel(1183137347525681214L);
+        crashReportChannel = channel(1183137347525681214L);
+        announcementsChannel = channel(1183137347525681214L);
+        artChannel = channel(1183147668315328563L);
+        mapsChannel = channel(1183147987275366490L);
+        moderationChannel = channel(1183137347525681214L);
+        schematicsChannel = channel(1183147616842809415L);
+        baseSchematicsChannel = channel(1183147616842809415L);
+        logChannel = channel(1183137347525681214L);
+        joinChannel = channel(1183137347525681214L);
+        streamsChannel = channel(1183137347525681214L);
+        videosChannel = channel(1183137347525681214L);
+        testingChannel = channel(1183137347525681214L);
+        alertsChannel = channel(1183137347525681214L);
+        curatedSchematicsChannel = channel(1183147616842809415L);
+        botsChannel = channel(1183137347525681214L);
 
         schematicChannels.add(schematicsChannel.getIdLong(), baseSchematicsChannel.getIdLong(), curatedSchematicsChannel.getIdLong());
     }
@@ -206,71 +204,41 @@ public class Messages extends ListenerAdapter{
     }
 
     void register(){
-        handler.<Message>register("help", "Displays all bot commands.", (args, msg) -> {
+        handler.<Message>register("help", "Відображає всі команди бота.", (args, msg) -> {
             StringBuilder builder = new StringBuilder();
             printCommands(handler, builder);
-            info(msg.getChannel(), "Commands", builder.toString());
+            info(msg.getChannel(), "Команди", builder.toString());
         });
 
-        handler.<Message>register("ping", "<ip>", "Pings a server.", (args, msg) -> {
+        handler.<Message>register("ping", "<ip>", "Пропінгує сервер.", (args, msg) -> {
             if(msg.getChannel().getIdLong() != botsChannel.getIdLong()){
-                errDelete(msg, "Use this command in #bots.");
+                errDelete(msg, "Використовуйте цю команду в #bots.");
                 return;
             }
 
             net.pingServer(args[0], result -> {
                 if(result.name != null){
-                    info(msg.getChannel(), "Server Online", "Host: @\nPlayers: @\nMap: @\nWave: @\nVersion: @\nPing: @ms",
+                    info(msg.getChannel(), "Сервер онлайн", "Хост: @\n" + "Гравці: @\n" + "Карта: @\n" + "Хвиля: @\n" + "Версія: @\n" + "Пінг: @ms",
                     Strings.stripColors(result.name), result.players, Strings.stripColors(result.mapname), result.wave, result.version, result.ping);
                 }else{
-                    errDelete(msg, "Server Offline", "Timed out.");
+                    errDelete(msg, "Сервер офлайн", "Час вичерпано.");
                 }
             });
         });
 
-        handler.<Message>register("info", "<topic>", "Displays information about a topic.", (args, msg) -> {
+        handler.<Message>register("info", "<посилання/бета/правила>", "Відображає інформацію на певну тему.", (args, msg) -> {
             try{
                 Info info = Info.valueOf(args[0]);
                 infoDesc(msg.getChannel(), info.title, info.text);
             }catch(IllegalArgumentException e){
-                errDelete(msg, "Error", "Invalid topic '@'.\nValid topics: *@*", args[0], Arrays.toString(Info.values()));
+                errDelete(msg, "О ні!", "Недопустима тема '@'. " + "\n Допустимі теми: *@*", args[0], Arrays.toString(Info.values()));
             }
         });
 
-
-        handler.<Message>register("postplugin", "<user> <repository>", "Post a plugin via Github repository URL.", (args, msg) -> {
-            // https://docs.github.com/en/rest/repos/repos#get-a-repository
-            Http.get("https://api.github.com/repos/" + args[0] + "/" + args[1])
-            .header("Accept", "application/vnd.github+json")
-            .error(err -> errDelete(msg, "Error querying Github", Strings.getSimpleMessage(err)))
-            .block(result -> {
-                try{
-                    Jval repo = Jval.read(result.getResultAsString());
-                    String repoUrl = repo.getString("html_url");
-                    Jval author = repo.get("owner");
-
-                    EmbedBuilder builder = new EmbedBuilder()
-                    .setColor(normalColor)
-                    .setTitle(repo.getString("name"), repoUrl);
-
-                    if(!repo.getString("description").isBlank()){
-                        builder.addField("About", repo.getString("description"), false);
-                    }
-
-                    builder.addField("Downloads", repoUrl + "/releases", false);
-
-                    pluginChannel.sendMessageEmbeds(builder.build()).queue();
-                    text(msg, "*Plugin posted.*");
-                }catch(Exception e){
-                    errDelete(msg, "Failed to fetch plugin info from URL.");
-                }
-            });
-        });
-
-        handler.<Message>register("postmap", "Post a .msav file to the #maps channel.", (args, msg) -> {
+        handler.<Message>register("postmap", "Опублікуйте файл .msav на каналі #мапи.", (args, msg) -> {
 
             if(msg.getAttachments().size() != 1 || !msg.getAttachments().get(0).getFileName().endsWith(".msav")){
-                errDelete(msg, "You must have one .msav file in the same message as the command!");
+                errDelete(msg, "Ви повинні мати .msav файл у тому самому повідомленні, що й команда!");
                 return;
             }
 
@@ -293,39 +261,39 @@ public class Messages extends ListenerAdapter{
 
                 mapsChannel.sendFile(mapFile).addFile(imageFile.file()).setEmbeds(builder.build()).queue();
 
-                text(msg, "*Map posted successfully.*");
+                text(msg, "*Мапу успішно опубліковано.*");
             }catch(Exception e){
                 String err = Strings.neatError(e, true);
                 int max = 900;
-                errDelete(msg, "Error parsing map.", err.length() < max ? err : err.substring(0, max));
+                errDelete(msg, "Помилка розбору мапи.", err.length() < max ? err : err.substring(0, max));
             }
         });
 
-        handler.<Message>register("verifymodder", "[user/repo]", "Verify yourself as a modder by showing a mod repository that you own. Invoke with no arguments for additional info.", (args, msg) -> {
+        handler.<Message>register("verifymodder", "[user/repo]", "Підтвердіть, що ви є розробником модифікацій, показавши ваш репозиторій з модифікацією. Викликайте команду без аргументів для отримання вимог.", (args, msg) -> {
             if(msg.getChannel().getIdLong() != botsChannel.getIdLong()){
-                errDelete(msg, "Use this command in #bots.");
+                errDelete(msg, "Використовуйте цю команду в #команди.");
                 return;
             }
 
             if(msg.getMember() == null){
-                errDelete(msg, "Absolutely no ghosts allowed.");
+                errDelete(msg, "Ніяких привидів не допускається.");
                 return;
             }
 
             String rawSearchString = (msg.getAuthor().getName() + "#" + msg.getAuthor().getDiscriminator());
 
             if(args.length == 0){
-                info(msg.getChannel(), "Modder Verification", """
-                To obtain the Modder role, you must do the following:
+                info(msg.getChannel(), "Верифікація розробника модифікацій", """
+                Щоб отримати роль *розробника модифікацій*, вам потрібно зробити наступне:
                 
-                1. Own a Github repository with the `mindustry-mod` tag.
-                2. Have at least @ stars on the repository.
-                3. Temporarily add your Discord `USERNAME#DISCRIMINATOR` (`@`) to the repository description or your user bio, to verify ownership.
-                4. Run this command with the repository URL or `Username/Repo` as an argument.
+                1. Мати власний репозиторій на Github з тегом `mindustry-mod`.
+                2. Мати принаймні @ зірок на репозиторії вашої модифікації.
+                3. Тимчасово додайте ваш Discord `USERNAME#DISCRIMINATOR` (`@`) до опису репозиторію або біографії користувача, щоб підтвердити право власності.
+                4. Запустіть цю команду з URL-адресою репозиторію або `Username/Repo` як аргументом.
                 """, minModStars, rawSearchString);
             }else{
                 if(msg.getMember().getRoles().stream().anyMatch(r -> r.equals(modderRole))){
-                    errDelete(msg, "You already have that role.");
+                    errDelete(msg, "Ви вже маєте цю роль.");
                     return;
                 }
 
@@ -337,7 +305,7 @@ public class Messages extends ListenerAdapter{
 
                 Http.get("https://api.github.com/repos/" + repo)
                 .header("Accept", "application/vnd.github.v3+json")
-                .error(err -> errDelete(msg, "Error fetching repository (Did you type the name correctly?)", Strings.getSimpleMessage(err)))
+                .error(err -> errDelete(msg, "Помилка при завантаженні репозиторію (Чи правильно ви ввели назву?)", Strings.getSimpleMessage(err)))
                 .block(res -> {
                     Jval val = Jval.read(res.getResultAsString());
                     String searchString = rawSearchString.toLowerCase(Locale.ROOT);
@@ -358,42 +326,42 @@ public class Messages extends ListenerAdapter{
                     }
 
                     if(!val.get("topics").asArray().contains(j -> j.asString().contains("mindustry-mod"))){
-                        errDelete(msg, "Unable to find `mindustry-mod` in the list of repository topics.\nAdd it in the topics section *(this can be edited next to the 'About' section)*.");
+                        errDelete(msg, "Не вдалося знайти `mindustry-mod` у списку тегів репозиторію.\n" + "Додайте його до тегів *(теги можна відредагувати поруч з розділом \"Про репозиторій\")*.");
                         return;
                     }
 
                     if(!actualContains[0]){
-                        errDelete(msg, "Unable to find your Discord username + discriminator in the repo description or owner bio.\n\nMake sure `" + rawSearchString + "` is written in one of these locations.");
+                        errDelete(msg, "Не вдалося знайти ваше ім'я користувача Discord + дискримінатор в описі репозиторію або біографії власника.\n\nПереконайтеся, що `" + rawSearchString + "` записано в одному з цих місць.");
                         return;
                     }
 
                     if(val.getInt("stargazers_count", 0) < minModStars){
-                        errDelete(msg, "You need at least " + minModStars + " stars on your repository to get the Modder role.");
+                        errDelete(msg, "Щоб отримати роль Розробник модифікацій, вам потрібно щонайменше " + minModStars + " зірок на вашому репозиторії.");
                         return;
                     }
 
                     guild.addRoleToMember(msg.getMember(), modderRole).queue();
 
-                    info(msg.getChannel(), "Success!", "You have now obtained the Modder role.");
+                    info(msg.getChannel(), "Вітаємо!", "Ви отримали роль розробника модифікацій!");
                 });
             }
         });
 
-        handler.<Message>register("google", "<phrase...>", "Let me google that for you.", (args, msg) -> {
+        handler.<Message>register("google", "<питання...>", "Дозвольте мені погуглити за вас.", (args, msg) -> {
             text(msg, "https://lmgt.org/?q=@", Strings.encode(args[0]));
         });
 
-        handler.<Message>register("cleanmod", "Clean up a modded zip archive. Changes json into hjson and formats code.", (args, msg) -> {
+        handler.<Message>register("cleanmod", "Очищення zip-архіву модифікації. Змінює json на hjson та форматує код.", (args, msg) -> {
 
             if(msg.getAttachments().size() != 1 || !msg.getAttachments().get(0).getFileName().endsWith(".zip")){
-                errDelete(msg, "You must have one .zip file in the same message as the command!");
+                errDelete(msg, "Ви повинні мати один .zip файл у тому ж повідомленні, що і команда!");
                 return;
             }
 
             Attachment a = msg.getAttachments().get(0);
 
             if(a.getSize() > 1024 * 1024 * 6){
-                errDelete(msg, "Zip files may be no more than 6 MB.");
+                errDelete(msg, "Zip-файли не повинні перевищувати 6 МБ.");
             }
 
             try{
@@ -430,19 +398,20 @@ public class Messages extends ListenerAdapter{
 
                 msg.getChannel().sendFile(destFile.file()).queue();
 
-                text(msg, "*Mod converted successfully.*");
+                text(msg, "*Мод успішно конвертовано.*");
             }catch(Throwable e){
-                errDelete(msg, "Error parsing mod.", Strings.neatError(e, false));
+                errDelete(msg, "Помилка розбору модифікації.", Strings.neatError(e, false));
             }
         });
 
-        handler.<Message>register("file", "<filename...>", "Find a Mindustry source file by name", (args, msg) -> {
+        handler.<Message>register("file", "<назва...>", "Знайти вихідний файл Mindustry за назвою.", (args, msg) -> {
             //epic asynchronous code, I know
             Http.get("https://api.github.com/search/code?q=" +
             "filename:" + Strings.encode(args[0]) + "%20" +
             "repo:Anuken/Mindustry")
             .header("Accept", "application/vnd.github.v3+json")
-            .error(err -> errDelete(msg, "Error querying Github", Strings.getSimpleMessage(err)))
+            .header("Authorization", "token персональний_токен_доступу_з_необмеженим_терміном_дії")
+            .error(err -> errDelete(msg, "Помилка запиту до Github", Strings.getSimpleMessage(err)))
             .block(result -> {
                 msg.delete().queue();
                 Jval val = Jval.read(result.getResultAsString());
@@ -452,6 +421,7 @@ public class Messages extends ListenerAdapter{
                 "filename:" + Strings.encode(args[0]) + "%20" +
                 "repo:Anuken/Arc")
                 .header("Accept", "application/vnd.github.v3+json")
+                .header("Authorization", "token персональний_токен_доступу_з_необмеженим_терміном_дії")
                 .block(arcResult -> {
                     Jval arcVal = Jval.read(arcResult.getResultAsString());
 
@@ -467,19 +437,19 @@ public class Messages extends ListenerAdapter{
                 }
 
                 if(count == 0){
-                    errDelete(msg, "No results found.");
+                    errDelete(msg, "Нічого не знайдено.");
                     return;
                 }
 
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setColor(normalColor);
-                embed.setAuthor(msg.getAuthor().getName() + ": Github Search Results", val.get("items").asArray().first().getString("html_url"), "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
-                embed.setTitle("Github Search Results");
+                embed.setAuthor(msg.getAuthor().getName() + ": Результати пошуку на Github", val.get("items").asArray().first().getString("html_url"), "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
+                embed.setTitle("Результати пошуку на Github");
 
                 if(count == 1){
                     Jval item = val.get("items").asArray().first();
                     embed.setTitle(item.getString("name"));
-                    embed.setDescription("[View on Github](" + item.getString("html_url") + ")");
+                    embed.setDescription("[Переглянути на Github](" + item.getString("html_url") + ")");
                 }else{
                     int maxResult = 5, i = 0;
                     StringBuilder results = new StringBuilder();
@@ -490,7 +460,7 @@ public class Messages extends ListenerAdapter{
                         results.append("[").append(item.getString("name")).append("]").append("(").append(item.getString("html_url")).append(")\n");
                     }
 
-                    embed.setTitle((count > maxResult ? maxResult + "+" : count) + " Source Results");
+                    embed.setTitle((count > maxResult ? maxResult + "+" : count) + " Вихідних результати(ів)");
                     embed.setDescription(results.toString());
                 }
 
@@ -499,67 +469,60 @@ public class Messages extends ListenerAdapter{
         });
 
 
-        handler.<Message>register("mywarnings", "Get information about your own warnings. Only usable in #bots.", (args, msg) -> {
+        handler.<Message>register("mywarnings", "Отримати інформацію про власні попередження. Доступно тільки в #команди.", (args, msg) -> {
             if(msg.getChannel().getIdLong() != botsChannel.getIdLong()){
-                errDelete(msg, "Use this command in #bots.");
+                errDelete(msg, "Використовуйте цю команду в #команди.");
                 return;
             }
 
             sendWarnings(msg, msg.getAuthor());
         });
 
-        handler.<Message>register("avatar", "[@user]", "Get a user's full avatar.", (args, msg) -> {
-            if(msg.getChannel().getIdLong() != botsChannel.getIdLong() && !isAdmin(msg.getAuthor())){
-                errDelete(msg, "Use this command in #bots.");
+        handler.<Message>register("avatar", "[@user]", "Показує повний аватар користувача.", (args, msg) -> {
+            if (msg.getChannel().getIdLong() != botsChannel.getIdLong() && !isAdmin(msg.getAuthor())) {
+                errDelete(msg, "Використовуйте цю команду лише в #команди.");
                 return;
             }
 
-            try{
+            try {
                 User user;
-                if(args.length > 0){
+                if (args.length > 0) {
                     long id;
-                    try{
+                    try {
                         id = Long.parseLong(args[0]);
-                    }catch(NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         String author = args[0].substring(2, args[0].length() - 1);
-                        if(author.startsWith("!")) author = author.substring(1);
+                        if (author.startsWith("!")) author = author.substring(1);
                         id = Long.parseLong(author);
                     }
 
                     user = jda.retrieveUserById(id).complete();
-                }else{
+                } else {
                     user = msg.getAuthor();
                 }
 
-                //if(user.getIdLong() == 737869099811733527L){
-                //    text(msg, "no");
-                //}else
-                if(user.getIdLong() == jda.getSelfUser().getIdLong() && Mathf.chance(0.5)){
-                    msg.getChannel().sendMessage(aaaaa.getAsMention()).queue();
-                }else{
-                    String link = user.getEffectiveAvatarUrl() + "?size=1024";
+                String link = user.getEffectiveAvatarUrl() + "?size=1024";
 
-                    EmbedBuilder embed = new EmbedBuilder();
-                    embed.setColor(normalColor);
-                    embed.setTitle("Avatar: " + user.getName() + "#" + user.getDiscriminator());
-                    embed.setImage(link);
-                    embed.setDescription("[Link](" + link + ")");
-                    embed.setFooter("Requested by " + msg.getAuthor().getName() + "#" + msg.getAuthor().getDiscriminator());
-                    msg.getChannel().sendMessageEmbeds(embed.build()).queue();
-                }
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.setColor(normalColor);
+                embed.setTitle("Аватар: " + user.getName() + "#" + user.getDiscriminator());
+                embed.setImage(link);
+                embed.setDescription("[Посилання](" + link + ")");
+                embed.setFooter("Надано за запитом " + msg.getAuthor().getName() + "#" + msg.getAuthor().getDiscriminator());
+                msg.getChannel().sendMessageEmbeds(embed.build()).queue();
 
-            }catch(Exception e){
-                errDelete(msg, "Incorrect name format or ID.");
+            } catch (Exception e) {
+                errDelete(msg, "Некоректе ім'я або ID");
             }
         });
 
-        adminHandler.<Message>register("adminhelp", "Displays all bot commands.", (args, msg) -> {
+        adminHandler.<Message>register("adminhelp", "Відображає всі команди бота.", (args, msg) -> {
             StringBuilder builder = new StringBuilder();
             printCommands(adminHandler, builder);
-            info(msg.getChannel(), "Admin Commands", builder.toString());
+            info(msg.getChannel(), "Команди адміністратора", builder.toString());
         });
 
-        adminHandler.<Message>register("userinfo", "<@user>", "Get user info.", (args, msg) -> {
+        adminHandler.<Message>register("userinfo", "<@user>", "Отримати інформацію про користувача.", (args, msg) -> {
             String author = args[0].substring(2, args[0].length() - 1);
             if(author.startsWith("!")) author = author.substring(1);
             try{
@@ -567,12 +530,12 @@ public class Messages extends ListenerAdapter{
                 User user = jda.retrieveUserById(l).complete();
 
                 if(user == null){
-                    errDelete(msg, "That user (ID @) is not in the cache. How did this happen?", l);
+                    errDelete(msg, "Цього користувача (ID @) немає в кеші. Як це могло статися?", l);
                 }else{
                     Member member = guild.retrieveMember(user).complete();
 
-                    info(msg.getChannel(), "Info for " + member.getEffectiveName(),
-                        "Nickname: @\nUsername: @\nID: @\nStatus: @\nRoles: @\nIs Admin: @\nTime Joined: @",
+                    info(msg.getChannel(), "Інформація про " + member.getEffectiveName(),
+                        "Відображуване ім'я: @\nІм'я користувача: @\nID: @\nСтатус: @\nРолі: @\nАдмін: @\nЧас приєднання: @",
                         member.getNickname(),
                         user.getName(),
                         member.getIdLong(),
@@ -583,11 +546,11 @@ public class Messages extends ListenerAdapter{
                     );
                 }
             }catch(Exception e){
-                errDelete(msg, "Incorrect name format or missing user.");
+                errDelete(msg, "Неправильний формат імені користувача або він відсутній.");
             }
         });
 
-        adminHandler.<Message>register("warnings", "<@user>", "Get number of warnings a user has.", (args, msg) -> {
+        adminHandler.<Message>register("warnings", "<@user>", "Отримати кількість попереджень, які має користувач.", (args, msg) -> {
             String author = args[0].substring(2, args[0].length() - 1);
             if(author.startsWith("!")) author = author.substring(1);
             try{
@@ -595,11 +558,11 @@ public class Messages extends ListenerAdapter{
                 User user = jda.retrieveUserById(l).complete();
                 sendWarnings(msg, user);
             }catch(Exception e){
-                errDelete(msg, "Incorrect name format.");
+                errDelete(msg, "Неправильний формат імені.");
             }
         });
 
-        adminHandler.<Message>register("testemoji", "<ID>", "Send an emoji by ID.", (args, msg) -> {
+        adminHandler.<Message>register("testemoji", "<ID>", "Надіслати емодзі за ID.", (args, msg) -> {
             Emote emoji = null;
 
             try{
@@ -615,25 +578,25 @@ public class Messages extends ListenerAdapter{
             }
 
             if(emoji == null){
-                errDelete(msg, "Emoji not found.");
+                errDelete(msg, "Емодзі не знайдено.");
             }else{
                 msg.delete().queue();
                 text(msg.getChannel(), emoji.getAsMention());
             }
         });
 
-        adminHandler.<Message>register("delete", "<amount>", "Delete some messages.", (args, msg) -> {
+        adminHandler.<Message>register("delete", "<amount>", "Видалити кілька повідомлень.", (args, msg) -> {
             try{
                 int number = Integer.parseInt(args[0]);
                 MessageHistory hist = msg.getChannel().getHistoryBefore(msg, number).complete();
                 msg.delete().queue();
                 msg.getTextChannel().deleteMessages(hist.getRetrievedHistory()).queue();
             }catch(NumberFormatException e){
-                errDelete(msg, "Invalid number.");
+                errDelete(msg, "Недійсний номер.");
             }
         });
 
-        adminHandler.<Message>register("warn", "<@user> [reason...]", "Warn a user.", (args, msg) -> {
+        adminHandler.<Message>register("warn", "<@user> [причина...]", "Видати попередження користувачеві.", (args, msg) -> {
             String author = args[0].substring(2, args[0].length() - 1);
             if(author.startsWith("!")) author = author.substring(1);
             try{
@@ -641,17 +604,17 @@ public class Messages extends ListenerAdapter{
                 User user = jda.retrieveUserById(l).complete();
                 var list = getWarnings(user);
                 list.add(System.currentTimeMillis() + ":::" + msg.getAuthor().getName() + (args.length > 1 ? ":::" + args[1] : ""));
-                text(msg, "**@**, you've been warned *@*.", user.getAsMention(), warningStrings[Mathf.clamp(list.size - 1, 0, warningStrings.length - 1)]);
+                text(msg, "**@**, вас попереджено *@*.", user.getAsMention(), warningStrings[Mathf.clamp(list.size - 1, 0, warningStrings.length - 1)]);
                 prefs.putArray("warning-list-" + user.getIdLong(), list);
                 if(list.size >= 3){
-                    moderationChannel.sendMessage("User " + user.getAsMention() + " has been warned 3 or more times!").queue();
+                    moderationChannel.sendMessage("Користувача " + user.getAsMention() + " було попереджено 3 або більше разів!").queue();
                 }
             }catch(Exception e){
-                errDelete(msg, "Incorrect name format.");
+                errDelete(msg, "Неправильний формат імені.");
             }
         });
 
-        adminHandler.<Message>register("unwarn", "<@user> <index>", "Remove a warning.", (args, msg) -> {
+        adminHandler.<Message>register("unwarn", "<@user> <індекс>", "Зняти попередження.", (args, msg) -> {
             String author = args[0].substring(2, args[0].length() - 1);
             if(author.startsWith("!")) author = author.substring(1);
             try{
@@ -662,57 +625,37 @@ public class Messages extends ListenerAdapter{
                 if(list.size > index - 1){
                     list.remove(index - 1);
                     prefs.putArray("warning-list-" + user.getIdLong(), list);
-                    text(msg, "Removed warning for user.");
+                    text(msg, "Видалено попередження для користувача.");
                 }else{
-                    errDelete(msg, "Invalid index. @ > @", index, list.size);
+                    errDelete(msg, "Неправильний індекс. @ > @", index, list.size);
                 }
             }catch(Exception e){
-                errDelete(msg, "Incorrect name/index format.");
+                errDelete(msg, "Неправильний формат імені/індексу.");
             }
         });
 
-        adminHandler.<Message>register("clearwarnings", "<@user>", "Clear number of warnings for a person.", (args, msg) -> {
+        adminHandler.<Message>register("clearwarnings", "<@user>", "Позбавити користувача усіх попереджень", (args, msg) -> {
             String author = args[0].substring(2, args[0].length() - 1);
             if(author.startsWith("!")) author = author.substring(1);
             try{
                 long l = Long.parseLong(author);
                 User user = jda.retrieveUserById(l).complete();
                 prefs.putArray("warning-list-" + user.getIdLong(), new Seq<>());
-                text(msg, "Cleared warnings for user '@'.", user.getName());
+                text(msg, "Очищено всі попередження для користувача '@'.", user.getName());
             }catch(Exception e){
-                errDelete(msg, "Incorrect name format.");
+                errDelete(msg, "Неправильний формат імені.");
             }
         });
 
-        adminHandler.<Message>register("schemdesigner", "<add/remove> <@user>", "Make a user a verified schematic designer.", (args, msg) -> {
-            String author = args[1].substring(2, args[1].length() - 1);
-            if(author.startsWith("!")) author = author.substring(1);
-            try{
-
-                var l = UserSnowflake.fromId(author);
-                User user = jda.retrieveUserById(author).complete();
-                boolean add = args[0].equals("add");
-                if(add){
-                    guild.addRoleToMember(l, guild.getRoleById(877171645427621889L)).queue();
-                }else{
-                    guild.removeRoleFromMember(l, guild.getRoleById(877171645427621889L)).queue();
-                }
-
-                text(msg, "**@** is @ a verified schematic designer.", user.getName(), add ? "now" : "no longer");
-            }catch(Exception e){
-                errDelete(msg, "Incorrect name format.");
-            }
-        });
-
-        adminHandler.<Message>register("banid", "<id> [reason...]", "Ban a user by a raw numeric ID.", (args, msg) -> {
+        adminHandler.<Message>register("banid", "<id> [причина...]", "Заблокувати користувача за ID.", (args, msg) -> {
             try{
                 long l = Long.parseLong(args[0]);
                 User user = jda.retrieveUserById(l).complete();
 
-                guild.ban(user, 0, args.length > 1 ? msg.getAuthor().getName() + " used banid: " + args[1] : msg.getAuthor().getName() + ": <no ban reason specified in command>").queue();
-                text(msg, "Banned user: **@**", l);
+                guild.ban(user, 0, args.length > 1 ? msg.getAuthor().getName() + " використаний banid: " + args[1] : msg.getAuthor().getName() + ": <причину бану не вказано>").queue();
+                text(msg, "Заблоковано користувача: **@**", l);
             }catch(Exception e){
-                errDelete(msg, "Incorrect name format, or user not found.");
+                errDelete(msg, "Неправильний формат імені користувача або його не знайдено.");
             }
         });
     }
@@ -749,27 +692,23 @@ public class Messages extends ListenerAdapter{
 
             if(msg.getAuthor().isBot() || msg.getChannel().getType() != ChannelType.TEXT) return;
 
-            if(msg.getMentionedUsers().contains(jda.getSelfUser())){
-                msg.addReaction(aaaaa).queue();
-            }
-
             EmbedBuilder log = new EmbedBuilder()
             .setAuthor(msg.getAuthor().getName(), msg.getAuthor().getEffectiveAvatarUrl(), msg.getAuthor().getEffectiveAvatarUrl())
             .setDescription(msg.getContentRaw().length() >= 2040 ? msg.getContentRaw().substring(0, 2040) + "..." : msg.getContentRaw())
-            .addField("Author", msg.getAuthor().getAsMention(), false)
-            .addField("Channel", msg.getTextChannel().getAsMention(), false)
+            .addField("Автор", msg.getAuthor().getAsMention(), false)
+            .addField("Канал", msg.getTextChannel().getAsMention(), false)
             .setColor(normalColor);
 
             for(var attach : msg.getAttachments()){
-                log.addField("File: " + attach.getFileName(), attach.getUrl(), false);
+                log.addField("Файл: " + attach.getFileName(), attach.getUrl(), false);
             }
 
             if(msg.getReferencedMessage() != null){
-                log.addField("Replying to", msg.getReferencedMessage().getAuthor().getAsMention() + " [Jump](" + msg.getReferencedMessage().getJumpUrl() + ")", false);
+                log.addField("У відповідь на", msg.getReferencedMessage().getAuthor().getAsMention() + " [Перейти](" + msg.getReferencedMessage().getJumpUrl() + ")", false);
             }
 
             if(msg.getMentionedUsers().stream().anyMatch(u -> u.getIdLong() == 123539225919488000L)){
-                log.addField("Note", "thisisamention", false);
+                log.addField("Примітка", "thisisamention", false);
             }
 
             if(msg.getChannel().getIdLong() != testingChannel.getIdLong()){
@@ -787,7 +726,7 @@ public class Messages extends ListenerAdapter{
 
                 if(msg.getType() != MessageType.CHANNEL_PINNED_ADD){
                     try{
-                        msg.getAuthor().openPrivateChannel().complete().sendMessage("Don't send messages without images in that channel.").queue();
+                        msg.getAuthor().openPrivateChannel().complete().sendMessage("Не надсилайте повідомлення без зображень у цьому каналі.").queue();
                     }catch(Exception e1){
                         e1.printStackTrace();
                     }
@@ -825,7 +764,7 @@ public class Messages extends ListenerAdapter{
 
                         field.append(result.getAsMention()).append(stack.amount).append("  ");
                     }
-                    builder.addField("Requirements", field.toString(), false);
+                    builder.addField("Вимоги", field.toString(), false);
 
                     msg.getChannel().sendFile(schemFile).addFile(previewFile).setEmbeds(builder.build()).queue();
                     msg.delete().queue();
@@ -833,7 +772,8 @@ public class Messages extends ListenerAdapter{
                     if(schematicChannels.contains(msg.getChannel().getIdLong())){
                         msg.delete().queue();
                         try{
-                            msg.getAuthor().openPrivateChannel().complete().sendMessage("Invalid schematic: " + e.getClass().getSimpleName() + (e.getMessage() == null ? "" : " (" + e.getMessage() + ")")).queue();
+                            msg.getAuthor().openPrivateChannel().complete().sendMessage("Недійсна схема: " + e.getClass().getSimpleName() + (e.getMessage() == null ? "" : " (" + e.getMessage() + ")")).queue();
+                            e.printStackTrace();
                         }catch(Exception e2){
                             e2.printStackTrace();
                         }
@@ -844,7 +784,7 @@ public class Messages extends ListenerAdapter{
                 //delete non-schematics
                 msg.delete().queue();
                 try{
-                    msg.getAuthor().openPrivateChannel().complete().sendMessage("Only send valid schematics in the #schematics channel. You may send them either as clipboard text or as a schematic file.").queue();
+                    msg.getAuthor().openPrivateChannel().complete().sendMessage("Надсилайте лише коректні схеми у #схеми. Ви можете надсилати їх у вигляді тексту з буфера обміну або у вигляді файлу.").queue();
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -876,7 +816,7 @@ public class Messages extends ListenerAdapter{
         if((msg.getChannel().getIdLong() == artChannel.getIdLong()) && msg.getAttachments().isEmpty()){
             msg.delete().queue();
             try{
-                msg.getAuthor().openPrivateChannel().complete().sendMessage("Don't send messages without images in that channel.").queue();
+                msg.getAuthor().openPrivateChannel().complete().sendMessage("Не надсилайте повідомлення без зображень у цьому каналі.").queue();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -887,19 +827,16 @@ public class Messages extends ListenerAdapter{
     public void onGuildMemberJoin(GuildMemberJoinEvent event){
         event.getUser().openPrivateChannel().complete().sendMessage(
         """
-        **Welcome to the Mindustry Discord.**
+        **Ласкаво просимо до україномовної спільноти по Mindustry.**
                 
-        *Make sure you read #rules and the channel topics before posting.*
-                
-        **View a list of all frequently answered questions here:**
-        <https://discordapp.com/channels/391020510269669376/611204372592066570/611586644402765828>
+        *Переконайтеся, що ви прочитали #правила та теми каналу перед тим, як писати!:з*
         """
         ).queue();
 
         joinChannel
         .sendMessageEmbeds(new EmbedBuilder()
             .setAuthor(event.getUser().getName(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl())
-            .addField("User", event.getUser().getAsMention(), false)
+            .addField("Користувач", event.getUser().getAsMention(), false)
             .addField("ID", "`" + event.getUser().getId() + "`", false)
             .setColor(normalColor).build())
         .queue();
@@ -907,14 +844,14 @@ public class Messages extends ListenerAdapter{
 
     void sendWarnings(Message msg, User user){
         var list = getWarnings(user);
-        text(msg, "User '@' has **@** @.\n@", user.getName(), list.size, list.size == 1 ? "warning" : "warnings",
+        text(msg, "Користувач '@' має **@** @.\n@", user.getName(), list.size, list.size == 1 ? "попередження" : "попереджень",
         list.map(s -> {
             String[] split = s.split(":::");
             long time = Long.parseLong(split[0]);
             String warner = split.length > 1 ? split[1] : null, reason = split.length > 2 ? split[2] : null;
-            return "- `" + fmt.format(new Date(time)) + "`: Expires in " + (warnExpireDays - Duration.ofMillis((System.currentTimeMillis() - time)).toDays()) + " days" +
-            (warner == null ? "" : "\n  ↳ *From:* " + warner) +
-            (reason == null ? "" : "\n  ↳ *Reason:* " + reason);
+            return "- `" + fmt.format(new Date(time)) + "`: Термін дії закінчується через " + (warnExpireDays - Duration.ofMillis((System.currentTimeMillis() - time)).toDays()) + " днів" +
+            (warner == null ? "" : "\n  - *Від:* " + warner) +
+            (reason == null ? "" : "\n  - *Причина:* " + reason);
         }).toString("\n"));
     }
 
@@ -936,7 +873,7 @@ public class Messages extends ListenerAdapter{
 
     /** Sends an error, deleting the base message and the error message after a delay. */
     public void errDelete(Message message, String text, Object... args){
-        errDelete(message, "Error", text, args);
+        errDelete(message, "О ні!", text, args);
     }
 
     /** Sends an error, deleting the base message and the error message after a delay. */
@@ -990,7 +927,7 @@ public class Messages extends ListenerAdapter{
 
     boolean isAdmin(User user){
         var member = guild.retrieveMember(user).complete();
-        return member != null && member.getRoles().stream().anyMatch(role -> role.getName().equals("Developer") || role.getName().equals("Moderator") || role.getName().equals("\uD83D\uDD28 \uD83D\uDD75️\u200D♂️"));
+        return member != null && member.getRoles().stream().anyMatch(role -> role.getName().equals("Модератор"));
     }
 
     String replaceCyrillic(String in){
@@ -1022,9 +959,9 @@ public class Messages extends ListenerAdapter{
             //go through every ping individually
             for(var ping : mentioned){
                 if(data.idsPinged.add(ping) && data.idsPinged.size >= pingSpamLimit){
-                    String banMessage = "Banned for spamming member pings in a row. If you believe this was in error, file an issue on the CoreBot Github (https://github.com/Anuken/CoreBot/issues) or contact a moderator.";
-                    Log.info("Autobanning @ for spamming @ pings in a row.", message.getAuthor().getName() + "#" + message.getAuthor().getId(), data.idsPinged.size);
-                    alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **has been auto-banned for pinging " + pingSpamLimit + " unique members in a row!**").queue();
+                    String banMessage = "Заблоковано за спам згадуваннями користувачів. Якщо ви вважаєте, що це сталося помилково, створіть скаргу на [Github](https://github.com/UkrainianMindustry/Message/issues) або зверніться до модераторів.";
+                    Log.info("Автобан @ за спам @ пінгів поспіль.", message.getAuthor().getName() + "#" + message.getAuthor().getId(), data.idsPinged.size);
+                    alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **було автоматично заблоковано за згадування " + pingSpamLimit + " користувачів поспіль!**").queue();
 
                     Runnable banMember = () -> message.getGuild().ban(message.getAuthor(), 1, banMessage).queue();
 
@@ -1045,26 +982,26 @@ public class Messages extends ListenerAdapter{
             if(!edit && linkPattern.matcher(content).find()){
 
                 if(content.equals(data.lastLinkMessage) && !message.getChannel().getId().equals(data.lastLinkChannelId)){
-                    Log.warn("User @ just spammed a link in @ (message: @): '@'", message.getAuthor().getName(), message.getChannel().getName(), message.getId(), content);
+                    Log.warn("Користувач @ щойно відправив посилання в @ (повідомлення: @): '@'", message.getAuthor().getName(), message.getChannel().getName(), message.getId(), content);
 
                     //only start deleting after 2 posts
                     if(data.linkCrossposts >= 1){
                         alertsChannel.sendMessage(
                             message.getAuthor().getAsMention() +
-                            " **is spamming a link** in " + message.getTextChannel().getAsMention() +
+                            " **спамить посиланнями** в " + message.getTextChannel().getAsMention() +
                             ":\n\n" + message.getContentRaw()
                         ).queue();
 
                         message.delete().queue();
-                        message.getAuthor().openPrivateChannel().complete().sendMessage("You have posted a link several times. Do not send any similar messages, or **you will be auto-banned.**").queue();
+                        message.getAuthor().openPrivateChannel().complete().sendMessage("Ви опублікували посилання кілька разів. Не надсилайте більше подібних повідомлень, інакше **вас буде автоматично заблоковано.**.").queue();
                     }
 
                     //4 posts = ban
                     if(data.linkCrossposts ++ >= 3){
-                        Log.warn("User @ (@) has been auto-banned after spamming link messages.", message.getAuthor().getName(), message.getAuthor().getAsMention());
+                        Log.warn("Користувача @ (@) було автоматично заблоковано за спам повідомленнями з посиланнями.", message.getAuthor().getName(), message.getAuthor().getAsMention());
 
-                        alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **has been auto-banned for spam-posting links!**").queue();
-                        message.getGuild().ban(message.getAuthor(), 1, "[Auto-Ban] Spam-posting links. If you are not a bot or spammer, please report this at https://github.com/Anuken/CoreBot/issues immediately!").queue();
+                        alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **було автоматично заблоковано за спам посиланнями!**").queue();
+                        message.getGuild().ban(message.getAuthor(), 1, "[Автоматичне блокування] Спам посиланнями. Якщо ви не є ботом або спамером, будь ласка, повідомте про це модерації або, на https://github.com/UkrainianMindustry/Message/issues негайно!").queue();
                     }
                 }
 
@@ -1080,42 +1017,42 @@ public class Messages extends ListenerAdapter{
             content = content.replaceAll("\u200B", "").replaceAll("\u200D", "");
 
             if(invitePattern.matcher(content).find()){
-                Log.warn("User @ just sent a discord invite in @.", message.getAuthor().getName(), message.getChannel().getName());
+                Log.warn("Користувач @ щойно надіслав запрошення на discord в @.", message.getAuthor().getName(), message.getChannel().getName());
                 message.delete().queue();
-                message.getAuthor().openPrivateChannel().complete().sendMessage("Do not send invite links in the Mindustry Discord server! Read the rules.").queue();
+                message.getAuthor().openPrivateChannel().complete().sendMessage("Не надсилайте запрошення на сервер! Не порушуйте правила.").queue();
                 return true;
             }else if((badWordPattern.matcher(content).find() || badWordPattern.matcher(replaceCyrillic(content)).find())){
                 alertsChannel.sendMessage(
                     message.getAuthor().getAsMention() +
-                    " **has sent a message with inaproppriate language** in " + message.getTextChannel().getAsMention() +
+                    " **надіслав повідомлення з неналежним лексиконом** у " + message.getTextChannel().getAsMention() +
                     ":\n\n" + message.getContentRaw()
                 ).queue();
 
                 message.delete().queue();
-                message.getAuthor().openPrivateChannel().complete().sendMessage("uou have been timed out for " + naughtyTimeoutMins +
-                    " minutes for using an unacceptable word in `#" + message.getChannel().getName() + "`.\nYour message:\n\n" + message.getContentRaw()).queue();
+                message.getAuthor().openPrivateChannel().complete().sendMessage("вас тимчасово заблоковано на " + naughtyTimeoutMins +
+                    " хвилин за використання неналежного лексикону в `#" + message.getChannel().getName() + "`.\nТвоє повідомлення:\n\n" + message.getContentRaw()).queue();
                 message.getMember().timeoutFor(Duration.ofMinutes(naughtyTimeoutMins)).queue();
 
                 return true;
             }else if(containsScamLink(message)){
-                Log.warn("User @ just sent a potential scam message in @: '@'", message.getAuthor().getName(), message.getChannel().getName(), message.getContentRaw());
+                Log.warn("Користувач @ щойно надіслав потенційно шахрайське повідомлення в @: '@'", message.getAuthor().getName(), message.getChannel().getName(), message.getContentRaw());
 
                 int count = data.scamMessages ++;
 
                 alertsChannel.sendMessage(
                     message.getAuthor().getAsMention() +
-                    " **has sent a potential scam message** in " + message.getTextChannel().getAsMention() +
+                    " **надіслав потенційно шахрайське повідомлення** в " + message.getTextChannel().getAsMention() +
                     ":\n\n" + message.getContentRaw()
                 ).queue();
 
                 message.delete().queue();
-                message.getAuthor().openPrivateChannel().complete().sendMessage("Your message has been flagged as a potential scam. Do not send any similar messages, or **you will be auto-banned.**").queue();
+                message.getAuthor().openPrivateChannel().complete().sendMessage("Ваше повідомлення було позначено як потенційне шахрайство. Не надсилайте більше подібних повідомлень, інакше **вас буде автоматично заблоковано.**").queue();
 
                 if(count >= scamAutobanLimit - 1){
-                    Log.warn("User @ (@) has been auto-banned after @ scam messages.", message.getAuthor().getName(), message.getAuthor().getAsMention(), count + 1);
+                    Log.warn("Користувач @ (@) був автоматично заблокований після @ шахрайських повідомлень.", message.getAuthor().getName(), message.getAuthor().getAsMention(), count + 1);
 
-                    alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **has been auto-banned for posting " + scamAutobanLimit + " scam messages in a row!**").queue();
-                    message.getGuild().ban(message.getAuthor(), 0, "[Auto-Ban] Posting several potential scam messages in a row. If you are not a bot or spammer, please report this at https://github.com/Anuken/CoreBot/issues immediately!").queue();
+                    alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **було автоматично заблоковано через публікацію " + scamAutobanLimit + " шахрайських повідомлень поспіль!**").queue();
+                    message.getGuild().ban(message.getAuthor(), 0, "[Автоблокування] Публікація декількох потенційно шахрайських повідомлень поспіль. Якщо ви не бот і не спамер, повідомте про це адміністрацію, або на https://github.com/UkrainianMindustry/Message/issues негайно!").queue();
                 }
 
                 return true;
@@ -1131,14 +1068,14 @@ public class Messages extends ListenerAdapter{
     boolean handleResponse(Message msg, CommandResponse response, boolean logUnknown){
         if(response.type == ResponseType.unknownCommand){
             if(logUnknown){
-                errDelete(msg, "Error", "Unknown command. Type !help for a list of commands.");
+                errDelete(msg, "О ні!", "Невідома команда. Введіть !help щоб отримати список команд.");
             }
             return false;
         }else if(response.type == ResponseType.manyArguments || response.type == ResponseType.fewArguments){
             if(response.command.params.length == 0){
-                errDelete(msg, "Invalid arguments.", "Usage: @@", prefix, response.command.text);
+                errDelete(msg, "Неприпустимі аргументи.", "Використання: @@", prefix, response.command.text);
             }else{
-                errDelete(msg, "Invalid arguments.", "Usage: @@ *@*", prefix, response.command.text, response.command.paramText);
+                errDelete(msg, "Неприпустимі аргументи.", "Використання: @@ *@*", prefix, response.command.text, response.command.paramText);
             }
         }
         return true;

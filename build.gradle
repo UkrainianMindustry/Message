@@ -4,6 +4,8 @@ project.ext.mainClassName = "corebot.CoreBot"
 sourceCompatibility = targetCompatibility = 16
 version = '1.0'
 
+compileJava.options.encoding = "UTF-8"
+
 sourceSets.main.java.srcDirs = ["src/"]
 allprojects{
     repositories{
@@ -20,7 +22,7 @@ allprojects{
 }
 
 ext{
-    mindustryVersion = 'v135'
+    mindustryVersion = 'v146'
 }
 
 task dist(type: Jar){
@@ -39,8 +41,8 @@ task dist(type: Jar){
 
 dependencies{
     implementation("net.dv8tion:JDA:5.0.0-alpha.10")
-    implementation "org.jsoup:jsoup:1.7.2"
-    implementation "com.github.Anuken.MindustryJitpack:core:5b7f751073"
-    implementation "com.github.Anuken.Arc:arc-core:dfcb21ce56"
+    implementation 'org.jsoup:jsoup:1.15.3'
+    implementation "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+    implementation "com.github.Anuken.Mindustry:core:$mindustryVersion"
     implementation "org.slf4j:slf4j-nop:1.7.31"
 }
