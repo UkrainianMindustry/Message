@@ -1017,7 +1017,7 @@ public class Messages extends ListenerAdapter{
                 return true;
             }else if((badWordPattern.matcher(content).find() || badWordPattern.matcher(replaceCyrillic(content)).find())){
                 alertsChannel.sendMessage(
-                    message.getAuthor().getAsMention() +
+                    "`" + message.getAuthor().getName() + "`" +
                     " **надіслав повідомлення з неналежним лексиконом** у " + message.getTextChannel().getAsMention() +
                     ":\n\n" + message.getContentRaw()
                 ).queue();
@@ -1034,7 +1034,7 @@ public class Messages extends ListenerAdapter{
                 int count = data.scamMessages ++;
 
                 alertsChannel.sendMessage(
-                    message.getAuthor().getAsMention() +
+                    "`" + message.getAuthor().getName() + "`" +
                     " **надіслав потенційно шахрайське повідомлення** в " + message.getTextChannel().getAsMention() +
                     ":\n\n" + message.getContentRaw()
                 ).queue();
