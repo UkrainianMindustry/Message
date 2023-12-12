@@ -61,8 +61,7 @@ public class Messages extends ListenerAdapter{
     );
 
     //yes it's base64 encoded, I don't want any of these words typed here
-    private static final Pattern badWordPattern = Pattern.compile(new String(Base64Coder.decode("KD88IVthLXpBLVpdKSg/OmN1bXxzZW1lbnxjb2NrfHB1c3N5fGN1bnR8bmlnZy5yKSg/IVthLXpBLVpdKQ==")));
-    private static final Pattern notBadWordPattern = Pattern.compile("");
+    private static final Pattern badWordPattern = Pattern.compile(new String(Base64Coder.decode("KD88IVthLXpBLVpdKSg/OmN1bXxzZW1lbnxjb2NrfHB1c3N5fGN1bnR8bmlnZy5yfNCx0LvRjy580YHRg9C60LB80LvQvtGFfNC00L4uLi7QudC+0LF80L8u0LQu0YAuLnwu0LHQu9Cw0L0pKD8hW2EtekEtWl0p")));
     private static final Pattern invitePattern = Pattern.compile("(discord\\.gg/\\w|discordapp\\.com/invite/\\w|discord\\.com/invite/\\w)");
     private static final Pattern linkPattern = Pattern.compile("http(s?)://");
     private static final Pattern notScamPattern = Pattern.compile("discord\\.py|discord\\.js|nitrome\\.com");
@@ -128,17 +127,17 @@ public class Messages extends ListenerAdapter{
 
     public Guild guild;
     public TextChannel
-    pluginChannel, crashReportChannel, announcementsChannel, artChannel,
+    announcementsChannel, artChannel,
     mapsChannel, moderationChannel, schematicsChannel, baseSchematicsChannel,
-    logChannel, joinChannel, videosChannel, streamsChannel, testingChannel,
-    alertsChannel, curatedSchematicsChannel, botsChannel;
+    logChannel, joinChannel, testingChannel,
+    alertsChannel, botsChannel;
 
     public Role modderRole;
 
     LongSeq schematicChannels = new LongSeq();
 
     public Messages(){
-        String token = "токен_бота"; //так, воно працює
+        String token = "токен"; //так, воно працює
 
         register();
 
@@ -162,28 +161,23 @@ public class Messages extends ListenerAdapter{
 
     void loadChannels(){
         //all guilds and channels are loaded here for faster lookup
-        guild = jda.getGuildById(1183137346745553087L);
+        guild = jda.getGuildById(1182814296690925620L);
 
-        modderRole = guild.getRoleById(1183145155440685196L);
+        modderRole = guild.getRoleById(1184222717323509890L);
 
-        pluginChannel = channel(1183137347525681214L);
-        crashReportChannel = channel(1183137347525681214L);
-        announcementsChannel = channel(1183137347525681214L);
-        artChannel = channel(1183147668315328563L);
-        mapsChannel = channel(1183147987275366490L);
-        moderationChannel = channel(1183137347525681214L);
-        schematicsChannel = channel(1183147616842809415L);
-        baseSchematicsChannel = channel(1183147616842809415L);
-        logChannel = channel(1183137347525681214L);
-        joinChannel = channel(1183137347525681214L);
-        streamsChannel = channel(1183137347525681214L);
-        videosChannel = channel(1183137347525681214L);
-        testingChannel = channel(1183137347525681214L);
-        alertsChannel = channel(1183137347525681214L);
-        curatedSchematicsChannel = channel(1183147616842809415L);
-        botsChannel = channel(1183137347525681214L);
+        announcementsChannel = channel(1182819594323366049L);
+        artChannel = channel(1182828396351344681L);
+        mapsChannel = channel(1182832710562107483L);
+        moderationChannel = channel(1182821095582220338L);
+        schematicsChannel = channel(1182832750194081802L);
+        baseSchematicsChannel = channel(1182832750194081802L);
+        logChannel = channel(1184223462307410020L);
+        joinChannel = channel(1182814297810812953L);
+        testingChannel = channel(1182821095582220338L);
+        alertsChannel = channel(1182826185034567741L);
+        botsChannel = channel(1182823522372948049L);
 
-        schematicChannels.add(schematicsChannel.getIdLong(), baseSchematicsChannel.getIdLong(), curatedSchematicsChannel.getIdLong());
+        schematicChannels.add(schematicsChannel.getIdLong(), baseSchematicsChannel.getIdLong());
     }
 
     void printCommands(CommandHandler handler, StringBuilder builder){
@@ -210,15 +204,15 @@ public class Messages extends ListenerAdapter{
             info(msg.getChannel(), "Команди", builder.toString());
         });
 
-        handler.<Message>register("ping", "<ip>", "Пропінгує сервер.", (args, msg) -> {
+        handler.<Message>register("ping", "<ip>", "Про пінгує сервер і видасть деяку інформацію про нього.", (args, msg) -> {
             if(msg.getChannel().getIdLong() != botsChannel.getIdLong()){
-                errDelete(msg, "Використовуйте цю команду в #bots.");
+                errDelete(msg, "Використовуйте цю команду в " + botsChannel.getAsMention() + ".");
                 return;
             }
 
             net.pingServer(args[0], result -> {
                 if(result.name != null){
-                    info(msg.getChannel(), "Сервер онлайн", "Хост: @\n" + "Гравці: @\n" + "Карта: @\n" + "Хвиля: @\n" + "Версія: @\n" + "Пінг: @ms",
+                    info(msg.getChannel(), "Сервер онлайн", "Хост: @\n" + "Гравці: @\n" + "Карта: @\n" + "Хвиля: @\n" + "Версія: @\n" + "Пінг: @мс",
                     Strings.stripColors(result.name), result.players, Strings.stripColors(result.mapname), result.wave, result.version, result.ping);
                 }else{
                     errDelete(msg, "Сервер офлайн", "Час вичерпано.");
@@ -271,7 +265,7 @@ public class Messages extends ListenerAdapter{
 
         handler.<Message>register("verifymodder", "[user/repo]", "Підтвердіть, що ви є розробником модифікацій, показавши ваш репозиторій з модифікацією. Викликайте команду без аргументів для отримання вимог.", (args, msg) -> {
             if(msg.getChannel().getIdLong() != botsChannel.getIdLong()){
-                errDelete(msg, "Використовуйте цю команду в #команди.");
+                errDelete(msg, "Використовуйте цю команду в " + botsChannel.getAsMention() + ".");
                 return;
             }
 
@@ -410,7 +404,7 @@ public class Messages extends ListenerAdapter{
             "filename:" + Strings.encode(args[0]) + "%20" +
             "repo:Anuken/Mindustry")
             .header("Accept", "application/vnd.github.v3+json")
-            .header("Authorization", "token персональний_токен_доступу_з_необмеженим_терміном_дії")
+            .header("Authorization", "token безлімітний_токен_доступу")
             .error(err -> errDelete(msg, "Помилка запиту до Github", Strings.getSimpleMessage(err)))
             .block(result -> {
                 msg.delete().queue();
@@ -421,7 +415,7 @@ public class Messages extends ListenerAdapter{
                 "filename:" + Strings.encode(args[0]) + "%20" +
                 "repo:Anuken/Arc")
                 .header("Accept", "application/vnd.github.v3+json")
-                .header("Authorization", "token персональний_токен_доступу_з_необмеженим_терміном_дії")
+                .header("Authorization", "token безлімітний_токен_доступу")
                 .block(arcResult -> {
                     Jval arcVal = Jval.read(arcResult.getResultAsString());
 
@@ -471,7 +465,7 @@ public class Messages extends ListenerAdapter{
 
         handler.<Message>register("mywarnings", "Отримати інформацію про власні попередження. Доступно тільки в #команди.", (args, msg) -> {
             if(msg.getChannel().getIdLong() != botsChannel.getIdLong()){
-                errDelete(msg, "Використовуйте цю команду в #команди.");
+                errDelete(msg, "Використовуйте цю команду в " + botsChannel.getAsMention() + ".");
                 return;
             }
 
@@ -480,7 +474,7 @@ public class Messages extends ListenerAdapter{
 
         handler.<Message>register("avatar", "[@user]", "Показує повний аватар користувача.", (args, msg) -> {
             if (msg.getChannel().getIdLong() != botsChannel.getIdLong() && !isAdmin(msg.getAuthor())) {
-                errDelete(msg, "Використовуйте цю команду лише в #команди.");
+                errDelete(msg, "Використовуйте цю команду в " + botsChannel.getAsMention() + ".");
                 return;
             }
 
@@ -546,7 +540,7 @@ public class Messages extends ListenerAdapter{
                     );
                 }
             }catch(Exception e){
-                errDelete(msg, "Неправильний формат імені користувача або він відсутній.");
+                errDelete(msg, "Неправильний формат імені або користувач відсутній.");
             }
         });
 
@@ -585,7 +579,7 @@ public class Messages extends ListenerAdapter{
             }
         });
 
-        adminHandler.<Message>register("delete", "<amount>", "Видалити кілька повідомлень.", (args, msg) -> {
+        adminHandler.<Message>register("delete", "<кількість>", "Видалити кілька повідомлень.", (args, msg) -> {
             try{
                 int number = Integer.parseInt(args[0]);
                 MessageHistory hist = msg.getChannel().getHistoryBefore(msg, number).complete();
@@ -655,7 +649,7 @@ public class Messages extends ListenerAdapter{
                 guild.ban(user, 0, args.length > 1 ? msg.getAuthor().getName() + " використаний banid: " + args[1] : msg.getAuthor().getName() + ": <причину бану не вказано>").queue();
                 text(msg, "Заблоковано користувача: **@**", l);
             }catch(Exception e){
-                errDelete(msg, "Неправильний формат імені користувача або його не знайдено.");
+                errDelete(msg, "Неправильний формат імені або користувач відсутній.");
             }
         });
     }
@@ -700,7 +694,7 @@ public class Messages extends ListenerAdapter{
             .setColor(normalColor);
 
             for(var attach : msg.getAttachments()){
-                log.addField("Файл: " + attach.getFileName(), attach.getUrl(), false);
+                log.addField("Файл: ", attach.getUrl(), false);
             }
 
             if(msg.getReferencedMessage() != null){
@@ -816,7 +810,7 @@ public class Messages extends ListenerAdapter{
         if((msg.getChannel().getIdLong() == artChannel.getIdLong()) && msg.getAttachments().isEmpty()){
             msg.delete().queue();
             try{
-                msg.getAuthor().openPrivateChannel().complete().sendMessage("Не надсилайте повідомлення без зображень у цьому каналі.").queue();
+                msg.getAuthor().openPrivateChannel().complete().sendMessage("Не надсилайте повідомлень без зображень у цьому каналі.").queue();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -829,7 +823,7 @@ public class Messages extends ListenerAdapter{
         """
         **Ласкаво просимо до україномовної спільноти по Mindustry.**
                 
-        *Переконайтеся, що ви прочитали #правила та теми каналу перед тим, як писати!:з*
+        *Переконайтеся, що ви прочитали <#1182817614976794699> та теми каналу перед тим, як писати!:з*
         """
         ).queue();
 
@@ -849,9 +843,9 @@ public class Messages extends ListenerAdapter{
             String[] split = s.split(":::");
             long time = Long.parseLong(split[0]);
             String warner = split.length > 1 ? split[1] : null, reason = split.length > 2 ? split[2] : null;
-            return "- `" + fmt.format(new Date(time)) + "`: Термін дії закінчується через " + (warnExpireDays - Duration.ofMillis((System.currentTimeMillis() - time)).toDays()) + " днів" +
-            (warner == null ? "" : "\n  - *Від:* " + warner) +
-            (reason == null ? "" : "\n  - *Причина:* " + reason);
+            return "`" + fmt.format(new Date(time)) + "`: Термін дії закінчується через " + (warnExpireDays - Duration.ofMillis((System.currentTimeMillis() - time)).toDays()) + " дні(в)" +
+            (warner == null ? "" : "\n  ↳ *Попередження від:* " + warner) +
+            (reason == null ? "" : "\n  ↳ *Причина:* " + reason);
         }).toString("\n"));
     }
 

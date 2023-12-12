@@ -41,11 +41,6 @@ public class ContentHandler{
     ObjectMap<String, Fi> imageFiles = new ObjectMap<>();
     ObjectMap<String, BufferedImage> regions = new ObjectMap<>();
 
-    //for testing only
-    //public static void main(String[] args) throws Exception{
-    //    new ContentHandler().previewSchematic(Schematics.readBase64("bXNjaAF4nDWQXW6DQAyEB3b5MX/JW0/BQ6repuoDJa6EBEsFJFJu01v0WL1C7XWLhD6NGc8sizPOKXwYFsbTyzIF7i/P+zgcB2/9lT84jIx8Ht553pG9/nx9v3kUfwaU4xru/Fg31NPBS7+vt038p8/At2U4prG/btM8A7jIiwzxISBBihypghTOlFMlx4EXayIDr3MICkRFqmJMIog72f+w06HancIZvCGD04ocsak0Z4VEURsaQyufpM1rZiGW1Ik97pW6F0+v62RFZEVkRaRFihhNFk0WTRZNds5KMyGIP1bZndQ6VETVmGpMtaZa6+/sEjpVv/XMJCs="));
-    //}
-
     public ContentHandler(){
         //clear cache
         new Fi("cache").deleteDirectory();
@@ -62,13 +57,13 @@ public class ContentHandler{
             }
         }
 
-        String assets = "../../core/assets/";
+        String assets = "../Mindustry/core/assets/";
         Vars.state = new GameState();
 
         TextureAtlasData data = new TextureAtlasData(new Fi(assets + "sprites/sprites.aatls"), new Fi(assets + "sprites"), false);
         Core.atlas = new TextureAtlas();
 
-        new Fi("../../core/assets-raw/sprites_out").walk(f -> {
+        new Fi("../Mindustry/core/assets-raw/sprites_out").walk(f -> {
             if(f.extEquals("png")){
                 imageFiles.put(f.nameWithoutExtension(), f);
             }
@@ -131,7 +126,7 @@ public class ContentHandler{
         }
 
         try{
-            BufferedImage image = ImageIO.read(new File("../../core/assets/sprites/block_colors.png"));
+            BufferedImage image = ImageIO.read(new File("../Mindustry/core/assets/sprites/block_colors.png"));
 
             for(Block block : Vars.content.blocks()){
                 block.mapColor.argb8888(image.getRGB(block.id, 0));

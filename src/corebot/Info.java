@@ -1,27 +1,31 @@
 package corebot;
 
 public enum Info{
-    посилання("Посилання на ресурси пов'язані з Mindustry",
+    download("Посилання на різні способи завантажити Mindustry",
+    """
+    [Steam](https://store.steampowered.com/app/1127400/Mindustry/)
+    [Android, Itch.io](https://anuke.itch.io/mindustry)
+    [IOS](https://itunes.apple.com/us/app/mindustry/id1385258906?mt=8&ign-mpt=uo%3D8)
+    [Google Play](https://play.google.com/store/apps/details?id=mindustry)
+            """),
+    links("Посилання на ресурси пов'язані з Mindustry",
     """
     [Вихідний код на Github](https://github.com/Anuken/Mindustry/)
     [Форма для пропозицій](https://github.com/Anuken/Mindustry-Suggestions/issues/new/choose)
     [Форма для повідомлення про хибу](https://github.com/Anuken/Mindustry/issues/new/choose)
     [Trello](https://trello.com/b/aE2tcUwF)
-    [Steam Версія](https://store.steampowered.com/app/1127400/Mindustry/)
-    [APK для Android та версія itch.io](https://anuke.itch.io/mindustry)
-    [iOS версія](https://itunes.apple.com/us/app/mindustry/id1385258906?mt=8&ign-mpt=uo%3D8)
-    [Посилання на TestFlight](https://testflight.apple.com/join/79Azm1hZ)
+    [TestFlight](https://testflight.apple.com/join/79Azm1hZ)
     [Mindustry Subreddit](https://www.reddit.com/r/mindustry)
     [Неофіційний Matrix Space](https://matrix.to/#/#mindustry-space:matrix.org)
     """),
-    бета("IOS/Android Beta",
+    beta("Як завантажити бета версії на IOS/Android",
     """
     Щоб приєднатися до Android Beta в Google Play Store, просто прокрутіть до низу сторінки і натисніть 'join beta'.
     Приєднання до бета-тестування займе деякий час. Наберіться терпіння.
     [Direct Link](https://play.google.com/apps/testing/mindustry).
-    Щоб долучитися до бета-тестування в IOS, натисніть на  [TestFlight Link](https://testflight.apple.com/join/79Azm1hZ), потім установіть Apple TestFlight додаток, щоб грати в Mindustry.
+    Щоб долучитися до бета-тестування в IOS, натисніть на [TestFlight Link](https://testflight.apple.com/join/79Azm1hZ), потім установіть Apple TestFlight додаток, щоб грати в Mindustry.
     """),
-    правила("Правила",
+    rules("Правила",
     """
     **1.** Розмовляти, надсилати картинки та відео тільки українською, виняток – англійська.
     **2. **Адміністратор/модератор може видати попередження за причиною, що не вказана в правилах, якщо вважатиме за потрібне.
