@@ -145,7 +145,8 @@ public class Messages extends ListenerAdapter{
     LongSeq schematicChannels = new LongSeq();
 
     public Messages(){
-        String token = System.getenv("MESSAGE_BOT_TOKEN");; //так, воно працює | фє
+        Dotenv dotenv = Dotenv.load();
+        String token = dotenv.get("MESSAGE_BOT_TOKEN");
 
         register();
 
@@ -207,7 +208,7 @@ public class Messages extends ListenerAdapter{
     }
 
     void register(){
-        handler.<Message>register("help", "Відображає всі команди бота.", (args, msg) -> {
+        handler.<Message>register("help", "Показує всі команди бота.", (args, msg) -> {
             StringBuilder builder = new StringBuilder();
             printCommands(handler, builder);
             info(msg.getChannel(), "Команди", builder.toString());
@@ -229,7 +230,7 @@ public class Messages extends ListenerAdapter{
             });
         });
 
-        handler.<Message>register("info", "<посилання/бета/правила>", "Відображає інформацію на певну тему.", (args, msg) -> {
+        handler.<Message>register("info", "<links/beta/rules>", "Показує інформацію на певну тему.", (args, msg) -> {
             try{
                 Info info = Info.valueOf(args[0]);
                 infoDesc(msg.getChannel(), info.title, info.text);
@@ -413,7 +414,7 @@ public class Messages extends ListenerAdapter{
             "filename:" + Strings.encode(args[0]) + "%20" +
             "repo:Anuken/Mindustry")
             .header("Accept", "application/vnd.github.v3+json")
-            .header("Authorization", "token безлімітний_токен_доступу")
+            .header("Authorization", "token " + dotenv.get("GITHUB_SEARCH_TOKEN"))
             .error(err -> errDelete(msg, "Помилка запиту до Github", Strings.getSimpleMessage(err)))
             .block(result -> {
                 msg.delete().queue();
@@ -424,7 +425,7 @@ public class Messages extends ListenerAdapter{
                 "filename:" + Strings.encode(args[0]) + "%20" +
                 "repo:Anuken/Arc")
                 .header("Accept", "application/vnd.github.v3+json")
-                .header("Authorization", "token безлімітний_токен_доступу")
+                .header("Authorization", "token " + dotenv.get("GITHUB_SEARCH_TOKEN"))
                 .block(arcResult -> {
                     Jval arcVal = Jval.read(arcResult.getResultAsString());
 

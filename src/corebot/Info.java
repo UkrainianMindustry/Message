@@ -1,7 +1,7 @@
 package corebot;
 
 public enum Info{
-    download("Посилання на різні способи завантажити Mindustry",
+    download("Mindustry доступна на таких платформах:",
     """
     [Steam](https://store.steampowered.com/app/1127400/Mindustry/)
     [Android, Itch.io](https://anuke.itch.io/mindustry)
