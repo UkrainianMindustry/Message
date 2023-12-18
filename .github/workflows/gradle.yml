@@ -49,7 +49,7 @@ jobs:
       - name: Start Message Bot
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ sec rets.HOST_SERVER_IP }}
+          host: ${{ secrets.HOST_SERVER_IP }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.Message }}
           script: |
