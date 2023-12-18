@@ -45,13 +45,3 @@ jobs:
           local_path: './build/libs/Message.jar'
           remote_path: '/home/cergc/bots/CoreBot/build/libs'
           sftpArgs: '-o ConnectTimeout=5'
-
-      - name: Start Message Bot
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.HOST_SERVER_IP }}
-          username: ${{ secrets.HOST_USERNAME }}
-          password: ${{ secrets.HOST_PASSWORD }}
-          script: |
-            bash /home/"$USER"/bots/CoreBot/build/libs/start_message_bot.sh &
-
