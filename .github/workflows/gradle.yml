@@ -50,7 +50,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST_SERVER_IP }}
-          username: ${{ secrets.HOST_USERNAME }}
+          username: cergc
           password: ${{ secrets.HOST_PASSWORD }}
           script: |
             bash home/cergc/bots/CoreBot/build/libs/start_message_bot.sh
