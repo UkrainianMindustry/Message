@@ -51,6 +51,6 @@ jobs:
         with:
           host: ${{ secrets.HOST_SERVER_IP }}
           username: ${{ secrets.HOST_USERNAME }}
-          password: ${{ secrets.Message }}
+          password: ${{ secrets.HOST_PASSWORD }}
           script: |
             bash home/cergc/bots/CoreBot/build/libs/start_message_bot.sh
