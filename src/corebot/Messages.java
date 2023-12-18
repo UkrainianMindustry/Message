@@ -145,7 +145,7 @@ public class Messages extends ListenerAdapter{
     LongSeq schematicChannels = new LongSeq();
 
     public Messages(){
-        String token = "токен"; //так, воно працює
+        String token = System.getenv("MESSAGE_BOT_TOKEN");; //так, воно працює | фє
 
         register();
 
