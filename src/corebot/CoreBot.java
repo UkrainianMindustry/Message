@@ -3,7 +3,7 @@ package corebot;
 import java.awt.*;
 import java.io.*;
 
-public class CoreBot{
+public class CoreBot {
     public static final String releasesURL = "https://api.github.com/repos/Anuken/Mindustry/releases";
     public static final File prefsFile = new File("prefs.properties");
 
@@ -17,7 +17,8 @@ public class CoreBot{
     public static Messages messages = new Messages();
     public static Net net = new Net();
     public static Prefs prefs = new Prefs(prefsFile);
+    public static Logging logging = new Logging();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
     }
 }

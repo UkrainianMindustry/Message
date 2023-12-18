@@ -127,10 +127,18 @@ public class Messages extends ListenerAdapter{
 
     public Guild guild;
     public TextChannel
-    announcementsChannel, artChannel,
-    mapsChannel, moderationChannel, schematicsChannel, baseSchematicsChannel,
-    logChannel, joinChannel, testingChannel,
-    alertsChannel, botsChannel;
+    announcementsChannel;
+    public TextChannel artChannel;
+    public TextChannel mapsChannel;
+    public TextChannel moderationChannel;
+    public TextChannel schematicsChannel;
+    public TextChannel baseSchematicsChannel;
+    public static TextChannel logChannel;
+    public TextChannel logDeletedMessagesChannel;
+    public TextChannel joinChannel;
+    public TextChannel testingChannel;
+    public TextChannel alertsChannel;
+    public TextChannel botsChannel;
 
     public Role modderRole;
 
@@ -172,6 +180,7 @@ public class Messages extends ListenerAdapter{
         schematicsChannel = channel(1182832750194081802L);
         baseSchematicsChannel = channel(1182832750194081802L);
         logChannel = channel(1184223462307410020L);
+        logDeletedMessagesChannel = channel(1186332530945818744L);
         joinChannel = channel(1182814297810812953L);
         testingChannel = channel(1182821095582220338L);
         alertsChannel = channel(1182826185034567741L);
