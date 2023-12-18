@@ -9,6 +9,7 @@ import arc.util.CommandHandler.*;
 import arc.util.io.Streams;
 import arc.util.serialization.*;
 import arc.util.serialization.Jval.*;
+import io.github.cdimascio.dotenv.Dotenv;
 import mindustry.*;
 import mindustry.game.*;
 import mindustry.type.*;
@@ -143,9 +144,10 @@ public class Messages extends ListenerAdapter{
     public Role modderRole;
 
     LongSeq schematicChannels = new LongSeq();
+    Dotenv dotenv = Dotenv.load();
 
     public Messages(){
-        Dotenv dotenv = Dotenv.load();
+
         String token = dotenv.get("MESSAGE_BOT_TOKEN");
 
         register();
