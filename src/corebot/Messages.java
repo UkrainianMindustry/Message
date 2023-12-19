@@ -1027,12 +1027,12 @@ public class Messages extends ListenerAdapter{
                 message.delete().queue();
                 message.getAuthor().openPrivateChannel().complete().sendMessage("Не надсилайте запрошення на сервер! Не порушуйте правила.").queue();
                 return true;
-            }else if((badWordPattern.matcher(content).find() || badWordPattern.matcher(replaceCyrillic(content)).find())){
+            /*}else if((badWordPattern.matcher(content).find() || badWordPattern.matcher(replaceCyrillic(content)).find())){
                 alertsChannel.sendMessage(
                     "`" + message.getAuthor().getName() + "`" +
                     " **надіслав повідомлення з неналежним лексиконом** у " + message.getTextChannel().getAsMention() +
                     ":\n\n" + message.getContentRaw()
-                ).queue();
+                ).queue();*/
 
                 message.delete().queue();
                 message.getAuthor().openPrivateChannel().complete().sendMessage("вас тимчасово заблоковано на " + naughtyTimeoutMins +
