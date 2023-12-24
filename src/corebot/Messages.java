@@ -44,82 +44,18 @@ public class Messages extends ListenerAdapter {
     private static final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     private static final String[] warningStrings = {"вперше", "вдруге", "втретє", "надто багато разів"};
 
-    private static final String
-            cyrillicFrom = "абсдефгнигклмпоркгзтюушхуз",
-            cyrillicTo = "abcdefghijklmnopqrstuvwxyz";
+    private static final String cyrillicFrom = "абсдефгнигклмпоркгзтюушхуз", cyrillicTo = "abcdefghijklmnopqrstuvwxyz";
 
     // https://stackoverflow.com/a/48769624
     private static final Pattern urlPattern = Pattern.compile("(?:(?:https?):\\/\\/)?[\\w/\\-?=%.]+\\.[\\w/\\-&?=%.]+");
-    private static final Set<String> trustedDomains = Set.of(
-            "discord.com",
-            "discord.co",
-            "discord.gg",
-            "discord.media",
-            "discord.gift",
-            "discordapp.com",
-            "discordapp.net",
-            "discordstatus.com"
-    );
+    private static final Set<String> trustedDomains = Set.of("discord.com", "discord.co", "discord.gg", "discord.media", "discord.gift", "discordapp.com", "discordapp.net", "discordstatus.com");
 
     //yes it's base64 encoded, I don't want any of these words typed here
     private static final Pattern badWordPattern = Pattern.compile(new String(Base64Coder.decode("KD88IVthLXpBLVpdKSg/OmN1bXxzZW1lbnxjb2NrfHB1c3N5fGN1bnR8bmlnZy5yfNCx0LvRjy580YHRg9C60LB80LvQvtGFfNC00L4uLi7QudC+0LF80L8u0LQu0YAuLnwu0LHQu9Cw0L0pKD8hW2EtekEtWl0p")));
     private static final Pattern invitePattern = Pattern.compile("(discord\\.gg/\\w|discordapp\\.com/invite/\\w|discord\\.com/invite/\\w)");
     private static final Pattern linkPattern = Pattern.compile("http(s?)://");
     private static final Pattern notScamPattern = Pattern.compile("discord\\.py|discord\\.js|nitrome\\.com");
-    private static final Pattern scamPattern = Pattern.compile(String.join("|",
-            "stea.*co.*\\.ru",
-            "http.*stea.*c.*\\..*trad",
-            "csgo.*kni[fv]e",
-            "cs.?go.*inventory",
-            "cs.?go.*cheat",
-            "cheat.*cs.?go",
-            "cs.?go.*skins",
-            "skins.*cs.?go",
-            "stea.*com.*partner",
-            "скин.*partner",
-            "steamcommutiny",
-            "di.*\\.gift.*nitro",
-            "http.*disc.*gift.*\\.",
-            "free.*nitro.*http",
-            "http.*free.*nitro.*",
-            "nitro.*free.*http",
-            "discord.*nitro.*free",
-            "free.*discord.*nitro",
-            "@everyone.*http",
-            "http.*@everyone",
-            "discordgivenitro",
-            "http.*gift.*nitro",
-            "http.*nitro.*gift",
-            "http.*n.*gift",
-            "бесплат.*нитро.*http",
-            "нитро.*бесплат.*http",
-            "nitro.*http.*disc.*nitro",
-            "http.*click.*nitro",
-            "http.*st.*nitro",
-            "http.*nitro",
-            "stea.*give.*nitro",
-            "discord.*nitro.*steam.*get",
-            "gift.*nitro.*http",
-            "http.*discord.*gift",
-            "discord.*nitro.*http",
-            "personalize.*your*profile.*http",
-            "nitro.*steam.*http",
-            "steam.*nitro.*http",
-            "nitro.*http.*d",
-            "http.*d.*gift",
-            "gift.*http.*d.*s",
-            "discord.*steam.*http.*d",
-            "nitro.*steam.*http",
-            "steam.*nitro.*http",
-            "dliscord.com",
-            "free.*nitro.*http",
-            "discord.*nitro.*http",
-            "@everyone.*http",
-            "http.*@everyone",
-            "@everyone.*nitro",
-            "nitro.*@everyone",
-            "discord.*gi.*nitro"
-    ));
+    private static final Pattern scamPattern = Pattern.compile(String.join("|", "stea.*co.*\\.ru", "http.*stea.*c.*\\..*trad", "csgo.*kni[fv]e", "cs.?go.*inventory", "cs.?go.*cheat", "cheat.*cs.?go", "cs.?go.*skins", "skins.*cs.?go", "stea.*com.*partner", "скин.*partner", "steamcommutiny", "di.*\\.gift.*nitro", "http.*disc.*gift.*\\.", "free.*nitro.*http", "http.*free.*nitro.*", "nitro.*free.*http", "discord.*nitro.*free", "free.*discord.*nitro", "@everyone.*http", "http.*@everyone", "discordgivenitro", "http.*gift.*nitro", "http.*nitro.*gift", "http.*n.*gift", "бесплат.*нитро.*http", "нитро.*бесплат.*http", "nitro.*http.*disc.*nitro", "http.*click.*nitro", "http.*st.*nitro", "http.*nitro", "stea.*give.*nitro", "discord.*nitro.*steam.*get", "gift.*nitro.*http", "http.*discord.*gift", "discord.*nitro.*http", "personalize.*your*profile.*http", "nitro.*steam.*http", "steam.*nitro.*http", "nitro.*http.*d", "http.*d.*gift", "gift.*http.*d.*s", "discord.*steam.*http.*d", "nitro.*steam.*http", "steam.*nitro.*http", "dliscord.com", "free.*nitro.*http", "discord.*nitro.*http", "@everyone.*http", "http.*@everyone", "@everyone.*nitro", "nitro.*@everyone", "discord.*gi.*nitro"));
 
     private final ObjectMap<String, UserData> userData = new ObjectMap<>();
     private final CommandHandler handler = new CommandHandler(prefix);
@@ -127,8 +63,7 @@ public class Messages extends ListenerAdapter {
     private final JDA jda;
 
     public Guild guild;
-    public TextChannel
-            announcementsChannel;
+    public TextChannel announcementsChannel;
     public TextChannel artChannel;
     public TextChannel mapsChannel;
     public TextChannel moderationChannel;
@@ -148,13 +83,13 @@ public class Messages extends ListenerAdapter {
 
     public Messages() {
 
-        String token = dotenv.get("MESSAGE_BOT_TOKEN");
+        String token = dotenv.get("MESSAGE_DISCORD_BOT_TOKEN");
+
 
         register();
 
         try {
-            jda = JDABuilder.createDefault(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
-                    .setMemberCachePolicy(MemberCachePolicy.ALL).disableCache(CacheFlag.VOICE_STATE).build();
+            jda = JDABuilder.createDefault(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGE_REACTIONS).setMemberCachePolicy(MemberCachePolicy.ALL).disableCache(CacheFlag.VOICE_STATE).build();
             jda.awaitReady();
             jda.addEventListener(this);
 
@@ -224,8 +159,7 @@ public class Messages extends ListenerAdapter {
 
             net.pingServer(args[0], result -> {
                 if (result.name != null) {
-                    info(msg.getChannel(), "Сервер онлайн", "Хост: @\n" + "Гравці: @\n" + "Карта: @\n" + "Хвиля: @\n" + "Версія: @\n" + "Пінг: @мс",
-                            Strings.stripColors(result.name), result.players, Strings.stripColors(result.mapname), result.wave, result.version, result.ping);
+                    info(msg.getChannel(), "Сервер онлайн", "Хост: @\n" + "Гравці: @\n" + "Карта: @\n" + "Хвиля: @\n" + "Версія: @\n" + "Пінг: @мс", Strings.stripColors(result.name), result.players, Strings.stripColors(result.mapname), result.wave, result.version, result.ping);
                 } else {
                     errDelete(msg, "Сервер офлайн", "Час вичерпано.");
                 }
@@ -309,47 +243,43 @@ public class Messages extends ListenerAdapter {
                     repo = repo.substring(offset);
                 }
 
-                Http.get("https://api.github.com/repos/" + repo)
-                        .header("Accept", "application/vnd.github.v3+json")
-                        .error(err -> errDelete(msg, "Помилка при завантаженні репозиторію (Чи правильно ви ввели назву?)", Strings.getSimpleMessage(err)))
-                        .block(res -> {
-                            Jval val = Jval.read(res.getResultAsString());
-                            String searchString = rawSearchString.toLowerCase(Locale.ROOT);
+                Http.get("https://api.github.com/repos/" + repo).header("Accept", "application/vnd.github.v3+json").error(err -> errDelete(msg, "Помилка при завантаженні репозиторію (Чи правильно ви ввели назву?)", Strings.getSimpleMessage(err))).block(res -> {
+                    Jval val = Jval.read(res.getResultAsString());
+                    String searchString = rawSearchString.toLowerCase(Locale.ROOT);
 
-                            boolean contains = val.getString("description").toLowerCase(Locale.ROOT).contains(searchString);
-                            boolean[] actualContains = {contains};
+                    boolean contains = val.getString("description").toLowerCase(Locale.ROOT).contains(searchString);
+                    boolean[] actualContains = {contains};
 
-                            //check bio if not found
-                            if (!contains) {
-                                Http.get(val.get("owner").getString("url"))
-                                        .error(Log::err) //why would this ever happen
-                                        .block(user -> {
-                                            Jval userVal = Jval.read(user.getResultAsString());
-                                            if (userVal.getString("bio", "").toLowerCase(Locale.ROOT).contains(searchString)) {
-                                                actualContains[0] = true;
-                                            }
-                                        });
-                            }
+                    //check bio if not found
+                    if (!contains) {
+                        Http.get(val.get("owner").getString("url")).error(Log::err) //why would this ever happen
+                                .block(user -> {
+                                    Jval userVal = Jval.read(user.getResultAsString());
+                                    if (userVal.getString("bio", "").toLowerCase(Locale.ROOT).contains(searchString)) {
+                                        actualContains[0] = true;
+                                    }
+                                });
+                    }
 
-                            if (!val.get("topics").asArray().contains(j -> j.asString().contains("mindustry-mod"))) {
-                                errDelete(msg, "Не вдалося знайти `mindustry-mod` у списку тегів репозиторію.\n" + "Додайте його до тегів *(теги можна відредагувати поруч з розділом \"Про репозиторій\")*.");
-                                return;
-                            }
+                    if (!val.get("topics").asArray().contains(j -> j.asString().contains("mindustry-mod"))) {
+                        errDelete(msg, "Не вдалося знайти `mindustry-mod` у списку тегів репозиторію.\n" + "Додайте його до тегів *(теги можна відредагувати поруч з розділом \"Про репозиторій\")*.");
+                        return;
+                    }
 
-                            if (!actualContains[0]) {
-                                errDelete(msg, "Не вдалося знайти ваше ім'я користувача Discord + дискримінатор в описі репозиторію або біографії власника.\n\nПереконайтеся, що `" + rawSearchString + "` записано в одному з цих місць.");
-                                return;
-                            }
+                    if (!actualContains[0]) {
+                        errDelete(msg, "Не вдалося знайти ваше ім'я користувача Discord + дискримінатор в описі репозиторію або біографії власника.\n\nПереконайтеся, що `" + rawSearchString + "` записано в одному з цих місць.");
+                        return;
+                    }
 
-                            if (val.getInt("stargazers_count", 0) < minModStars) {
-                                errDelete(msg, "Щоб отримати роль Розробник модифікацій, вам потрібно щонайменше " + minModStars + " зірок на вашому репозиторії.");
-                                return;
-                            }
+                    if (val.getInt("stargazers_count", 0) < minModStars) {
+                        errDelete(msg, "Щоб отримати роль Розробник модифікацій, вам потрібно щонайменше " + minModStars + " зірок на вашому репозиторії.");
+                        return;
+                    }
 
-                            guild.addRoleToMember(msg.getMember(), modderRole).queue();
+                    guild.addRoleToMember(msg.getMember(), modderRole).queue();
 
-                            info(msg.getChannel(), "Вітаємо!", "Ви отримали роль розробника модифікацій!");
-                        });
+                    info(msg.getChannel(), "Вітаємо!", "Ви отримали роль розробника модифікацій!");
+                });
             }
         });
 
@@ -412,66 +342,55 @@ public class Messages extends ListenerAdapter {
 
         handler.<Message>register("file", "<назва...>", "Знайти вихідний файл Mindustry за назвою.", (args, msg) -> {
             //epic asynchronous code, I know
-            Http.get("https://api.github.com/search/code?q=" +
-                            "filename:" + Strings.encode(args[0]) + "%20" +
-                            "repo:Anuken/Mindustry")
-                    .header("Accept", "application/vnd.github.v3+json")
-                    .header("Authorization", "token " + dotenv.get("GITHUB_SEARCH_TOKEN"))
-                    .error(err -> errDelete(msg, "Помилка запиту до Github", Strings.getSimpleMessage(err)))
-                    .block(result -> {
-                        msg.delete().queue();
-                        Jval val = Jval.read(result.getResultAsString());
+            Http.get("https://api.github.com/search/code?q=" + "filename:" + Strings.encode(args[0]) + "%20" + "repo:Anuken/Mindustry").header("Accept", "application/vnd.github.v3+json").header("Authorization", "token " + dotenv.get("GITHUB_SEARCH_TOKEN")).error(err -> errDelete(msg, "Помилка запиту до Github", Strings.getSimpleMessage(err))).block(result -> {
+                msg.delete().queue();
+                Jval val = Jval.read(result.getResultAsString());
 
-                        //merge with arc results
-                        Http.get("https://api.github.com/search/code?q=" +
-                                        "filename:" + Strings.encode(args[0]) + "%20" +
-                                        "repo:Anuken/Arc")
-                                .header("Accept", "application/vnd.github.v3+json")
-                                .header("Authorization", "token " + dotenv.get("GITHUB_SEARCH_TOKEN"))
-                                .block(arcResult -> {
-                                    Jval arcVal = Jval.read(arcResult.getResultAsString());
+                //merge with arc results
+                Http.get("https://api.github.com/search/code?q=" + "filename:" + Strings.encode(args[0]) + "%20" + "repo:Anuken/Arc").header("Accept", "application/vnd.github.v3+json").header("Authorization", "token " + dotenv.get("GITHUB_SEARCH_TOKEN")).block(arcResult -> {
+                    Jval arcVal = Jval.read(arcResult.getResultAsString());
 
-                                    val.get("items").asArray().addAll(arcVal.get("items").asArray());
-                                    val.put("total_count", val.getInt("total_count", 0) + arcVal.getInt("total_count", 0));
-                                });
+                    val.get("items").asArray().addAll(arcVal.get("items").asArray());
+                    val.put("total_count", val.getInt("total_count", 0) + arcVal.getInt("total_count", 0));
+                });
 
-                        int count = val.getInt("total_count", 0);
+                int count = val.getInt("total_count", 0);
 
-                        if (count > 0) {
-                            val.get("items").asArray().removeAll(j -> !j.getString("name").contains(args[0]));
-                            count = val.get("items").asArray().size;
+                if (count > 0) {
+                    val.get("items").asArray().removeAll(j -> !j.getString("name").contains(args[0]));
+                    count = val.get("items").asArray().size;
+                }
+
+                if (count == 0) {
+                    errDelete(msg, "Нічого не знайдено.");
+                    return;
+                }
+
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.setColor(normalColor);
+                embed.setAuthor(msg.getAuthor().getName() + ": Результати пошуку на Github", val.get("items").asArray().first().getString("html_url"), "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
+                embed.setTitle("Результати пошуку на Github");
+
+                if (count == 1) {
+                    Jval item = val.get("items").asArray().first();
+                    embed.setTitle(item.getString("name"));
+                    embed.setDescription("[Переглянути на Github](" + item.getString("html_url") + ")");
+                } else {
+                    int maxResult = 5, i = 0;
+                    StringBuilder results = new StringBuilder();
+                    for (Jval item : val.get("items").asArray()) {
+                        if (i++ > maxResult) {
+                            break;
                         }
+                        results.append("[").append(item.getString("name")).append("]").append("(").append(item.getString("html_url")).append(")\n");
+                    }
 
-                        if (count == 0) {
-                            errDelete(msg, "Нічого не знайдено.");
-                            return;
-                        }
+                    embed.setTitle((count > maxResult ? maxResult + "+" : count) + " Вихідних результати(ів)");
+                    embed.setDescription(results.toString());
+                }
 
-                        EmbedBuilder embed = new EmbedBuilder();
-                        embed.setColor(normalColor);
-                        embed.setAuthor(msg.getAuthor().getName() + ": Результати пошуку на Github", val.get("items").asArray().first().getString("html_url"), "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png");
-                        embed.setTitle("Результати пошуку на Github");
-
-                        if (count == 1) {
-                            Jval item = val.get("items").asArray().first();
-                            embed.setTitle(item.getString("name"));
-                            embed.setDescription("[Переглянути на Github](" + item.getString("html_url") + ")");
-                        } else {
-                            int maxResult = 5, i = 0;
-                            StringBuilder results = new StringBuilder();
-                            for (Jval item : val.get("items").asArray()) {
-                                if (i++ > maxResult) {
-                                    break;
-                                }
-                                results.append("[").append(item.getString("name")).append("]").append("(").append(item.getString("html_url")).append(")\n");
-                            }
-
-                            embed.setTitle((count > maxResult ? maxResult + "+" : count) + " Вихідних результати(ів)");
-                            embed.setDescription(results.toString());
-                        }
-
-                        msg.getChannel().sendMessageEmbeds(embed.build()).queue();
-                    });
+                msg.getChannel().sendMessageEmbeds(embed.build()).queue();
+            });
         });
 
 
@@ -480,7 +399,6 @@ public class Messages extends ListenerAdapter {
                 errDelete(msg, "Використовуйте цю команду в " + botsChannel.getAsMention() + ".");
                 return;
             }
-
             sendWarnings(msg, msg.getAuthor());
         });
 
@@ -540,16 +458,7 @@ public class Messages extends ListenerAdapter {
                 } else {
                     Member member = guild.retrieveMember(user).complete();
 
-                    info(msg.getChannel(), "Інформація про " + member.getEffectiveName(),
-                            "Відображуване ім'я: @\nІм'я користувача: @\nID: @\nСтатус: @\nРолі: @\nАдмін: @\nЧас приєднання: @",
-                            member.getNickname(),
-                            user.getName(),
-                            member.getIdLong(),
-                            member.getOnlineStatus(),
-                            member.getRoles().stream().map(Role::getName).collect(Collectors.toList()),
-                            isAdmin(user),
-                            member.getTimeJoined()
-                    );
+                    info(msg.getChannel(), "Інформація про " + member.getEffectiveName(), "Відображуване ім'я: @\nІм'я користувача: @\nID: @\nСтатус: @\nРолі: @\nАдмін: @\nЧас приєднання: @", member.getNickname(), user.getName(), member.getIdLong(), member.getOnlineStatus(), member.getRoles().stream().map(Role::getName).collect(Collectors.toList()), isAdmin(user), member.getTimeJoined());
                 }
             } catch (Exception e) {
                 errDelete(msg, "Неправильний формат імені або користувач відсутній.");
@@ -609,28 +518,32 @@ public class Messages extends ListenerAdapter {
                 StringBuilder violatedRules = new StringBuilder();
                 violatedRules.append("Порушені правила:");
                 if (args.length > 1) {
-
+                    violatedRules.append('\n');
                     String[] additionalArgs = new String[args.length - 1];
                     String[] rules = getRulesArray();
 
                     System.arraycopy(args, 1, additionalArgs, 0, args.length - 1);
 
-                    try {
-                        for (String additionalArg : additionalArgs) {
-                            if (additionalArg.contains("r")) {
-                                int ruleNumber = Integer.parseInt(additionalArg);
-                                violatedRules.append(rules[ruleNumber - 1]);
+
+                    for (String additionalArg : additionalArgs) {
+                        String[] reasons = additionalArg.split("[, +]+");
+                        for (String reason : reasons) {
+                            if (reason.contains("r")) {
+                                try {
+                                    int ruleNumber = Integer.parseInt(reason.replaceAll("[\\D]", ""));
+                                    violatedRules.append(ruleNumber).append(". ").append(rules[ruleNumber - 1]).append('\n');
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             } else {
-                                violatedRules.append(additionalArg);
+                                violatedRules.append(reason);
                             }
                         }
-                    } catch (Exception ignored) {
-
                     }
 
-                    moderationChannel.sendMessage("Порушені правила: " + violatedRules).queue();
                 } else {
-                    moderationChannel.sendMessage("Порушених правил немає").queue();
+                    violatedRules = new StringBuilder();
+                    violatedRules.append("модератор не вказав порушені правила");
                 }
                 long userIdFromMention = Long.parseLong(author);
                 User user = jda.retrieveUserById(userIdFromMention).complete();
@@ -724,12 +637,7 @@ public class Messages extends ListenerAdapter {
 
             if (msg.getAuthor().isBot() || msg.getChannel().getType() != ChannelType.TEXT) return;
 
-            EmbedBuilder log = new EmbedBuilder()
-                    .setAuthor(msg.getAuthor().getName(), msg.getAuthor().getEffectiveAvatarUrl(), msg.getAuthor().getEffectiveAvatarUrl())
-                    .setDescription(msg.getContentRaw().length() >= 2040 ? msg.getContentRaw().substring(0, 2040) + "..." : msg.getContentRaw())
-                    .addField("Автор", msg.getAuthor().getAsMention(), false)
-                    .addField("Канал", msg.getTextChannel().getAsMention(), false)
-                    .setColor(normalColor);
+            EmbedBuilder log = new EmbedBuilder().setAuthor(msg.getAuthor().getName(), msg.getAuthor().getEffectiveAvatarUrl(), msg.getAuthor().getEffectiveAvatarUrl()).setDescription(msg.getContentRaw().length() >= 2040 ? msg.getContentRaw().substring(0, 2040) + "..." : msg.getContentRaw()).addField("Автор", msg.getAuthor().getAsMention(), false).addField("Канал", msg.getTextChannel().getAsMention(), false).setColor(normalColor);
 
             for (var attach : msg.getAttachments()) {
                 log.addField("Файл: ", attach.getUrl(), false);
@@ -857,34 +765,24 @@ public class Messages extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        event.getUser().openPrivateChannel().complete().sendMessage(
-                """
-                        **Ласкаво просимо до україномовної спільноти по Mindustry.**
-                                
-                        *Переконайтеся, що ви прочитали <#1182817614976794699> та теми каналу перед тим, як писати!:з*
-                        """
-        ).queue();
+        event.getUser().openPrivateChannel().complete().sendMessage("""
+                **Ласкаво просимо до україномовної спільноти по Mindustry.**
+                        
+                *Переконайтеся, що ви прочитали <#1182817614976794699> та теми каналу перед тим, як писати!:з*
+                """).queue();
 
-        joinChannel
-                .sendMessageEmbeds(new EmbedBuilder()
-                        .setAuthor(event.getUser().getName(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl())
-                        .addField("Користувач", event.getUser().getAsMention(), false)
-                        .addField("ID", "`" + event.getUser().getId() + "`", false)
-                        .setColor(normalColor).build())
-                .queue();
+        joinChannel.sendMessageEmbeds(new EmbedBuilder().setAuthor(event.getUser().getName(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl()).addField("Користувач", event.getUser().getAsMention(), false).addField("ID", "`" + event.getUser().getId() + "`", false).setColor(normalColor).build()).queue();
     }
 
     void sendWarnings(Message msg, User user) {
         var list = getWarnings(user);
-        text(msg, "Користувач '@' має **@** @.\n@", user.getName(), list.size, "попередження",
-                list.map(s -> {
-                    String[] split = s.split(":::");
-                    long time = Long.parseLong(split[0]);
-                    String warner = split.length > 1 ? split[1] : null, reason = split.length > 2 ? split[2] : null;
-                    return "`" + fmt.format(new Date(time)) + "`: Термін дії закінчується через " + (warnExpireDays - Duration.ofMillis((System.currentTimeMillis() - time)).toDays()) + " дні(в)" +
-                            (warner == null ? "" : "\n  ↳ *Попередження від:* " + warner) +
-                            (reason == null ? "" : "\n  ↳ *Причина:* " + reason);
-                }).toString("\n"));
+        var message = list.map(s -> {
+            String[] split = s.split(":::");
+            long time = Long.parseLong(split[0]);
+            String warner = split.length > 1 ? split[1] : null, reason = split.length > 2 ? split[2] : null;
+            return "`" + fmt.format(new Date(time)) + "`: Термін дії закінчується через " + (warnExpireDays - Duration.ofMillis((System.currentTimeMillis() - time)).toDays()) + " дні(в)" + (warner == null ? "" : "\n  ↳ *Попередження від:* " + warner) + (reason == null ? "" : "\n  ↳ *Причина:* " + reason);
+        }).toString("\n");
+        text(msg, "Користувач '@' має **@** @.\n@", user.getName(), list.size, "попередження", message);
     }
 
     public void text(MessageChannel channel, String text, Object... args) {
@@ -914,9 +812,7 @@ public class Messages extends ListenerAdapter {
      * Sends an error, deleting the base message and the error message after a delay.
      */
     public void errDelete(Message message, String title, String text, Object... args) {
-        message.getChannel().sendMessageEmbeds(new EmbedBuilder()
-                        .addField(title, Strings.format(text, args), true).setColor(errorColor).build())
-                .queue(result -> result.delete().queueAfter(messageDeleteTime, TimeUnit.MILLISECONDS));
+        message.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(title, Strings.format(text, args), true).setColor(errorColor).build()).queue(result -> result.delete().queueAfter(messageDeleteTime, TimeUnit.MILLISECONDS));
 
         //delete base message too
         message.delete().queueAfter(messageDeleteTime, TimeUnit.MILLISECONDS);
@@ -1022,11 +918,7 @@ public class Messages extends ListenerAdapter {
 
                     //only start deleting after 2 posts
                     if (data.linkCrossposts >= 1) {
-                        alertsChannel.sendMessage(
-                                message.getAuthor().getAsMention() +
-                                        " **спамить посиланнями** в " + message.getTextChannel().getAsMention() +
-                                        ":\n\n" + message.getContentRaw()
-                        ).queue();
+                        alertsChannel.sendMessage(message.getAuthor().getAsMention() + " **спамить посиланнями** в " + message.getTextChannel().getAsMention() + ":\n\n" + message.getContentRaw()).queue();
 
                         message.delete().queue();
                         message.getAuthor().openPrivateChannel().complete().sendMessage("Ви опублікували посилання кілька разів. Не надсилайте більше подібних повідомлень, інакше **вас буде автоматично заблоковано.**.").queue();
@@ -1075,11 +967,7 @@ public class Messages extends ListenerAdapter {
 
                 int count = data.scamMessages++;
 
-                alertsChannel.sendMessage(
-                        "`" + message.getAuthor().getName() + "`" +
-                                " **надіслав потенційно шахрайське повідомлення** в " + message.getTextChannel().getAsMention() +
-                                ":\n\n" + message.getContentRaw()
-                ).queue();
+                alertsChannel.sendMessage("`" + message.getAuthor().getName() + "`" + " **надіслав потенційно шахрайське повідомлення** в " + message.getTextChannel().getAsMention() + ":\n\n" + message.getContentRaw()).queue();
 
                 message.delete().queue();
                 message.getAuthor().openPrivateChannel().complete().sendMessage("Ваше повідомлення було позначено як потенційне шахрайство. Не надсилайте більше подібних повідомлень, інакше **вас буде автоматично заблоковано.**").queue();
@@ -1135,11 +1023,7 @@ public class Messages extends ListenerAdapter {
 
         for (String url : urls) {
             // Gets the domain and splits its different parts
-            String[] rawDomain = url
-                    .replace("https://", "")
-                    .replace("http://", "")
-                    .split("/")[0]
-                    .split("\\.");
+            String[] rawDomain = url.replace("https://", "").replace("http://", "").split("/")[0].split("\\.");
 
             // Gets rid of the subdomains
             rawDomain = Arrays.copyOfRange(rawDomain, Math.max(rawDomain.length - 2, 0), rawDomain.length);

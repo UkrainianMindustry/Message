@@ -10,3 +10,5 @@
 /out/
 CoreBot.iml
 prefs.properties
+.env
+/prefs_messages.properties
