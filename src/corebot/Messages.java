@@ -627,6 +627,10 @@ public class Messages extends ListenerAdapter {
                     } catch (Exception ignored) {
 
                     }
+
+                    moderationChannel.sendMessage("Порушені правила: " + violatedRules).queue();
+                } else {
+                    moderationChannel.sendMessage("Порушених правил немає").queue();
                 }
                 long userIdFromMention = Long.parseLong(author);
                 User user = jda.retrieveUserById(userIdFromMention).complete();
