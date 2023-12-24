@@ -536,7 +536,7 @@ public class Messages extends ListenerAdapter {
                                     e.printStackTrace();
                                 }
                             } else {
-                                violatedRules.append(reason);
+                                violatedRules.append(reason).append(" ");
                             }
                         }
                     }
