@@ -5,7 +5,7 @@ import java.io.*;
 
 public class CoreBot {
     public static final String releasesURL = "https://api.github.com/repos/Anuken/Mindustry/releases";
-    public static final File prefsFile = new File("prefs.properties");
+    public static final File prefsFile = new File("prefs_messages.properties");
 
     public static final Color normalColor = Color.decode("#FAB462");
     public static final Color errorColor = Color.decode("#ff3838");
