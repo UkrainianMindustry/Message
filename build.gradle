@@ -42,7 +42,7 @@ dependencies{
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
     implementation("net.dv8tion:JDA:5.0.0-alpha.10")
     implementation 'org.jsoup:jsoup:1.15.3'
-    implementation "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+    implementation "com.github.Anuken.Arc:arc-core:152e49944"
     implementation "com.github.Anuken.Mindustry:core:$mindustryVersion"
     implementation "org.slf4j:slf4j-nop:1.7.31"
 
