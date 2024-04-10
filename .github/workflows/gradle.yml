@@ -39,9 +39,9 @@ jobs:
       - name: Deploy File To Cerg Host
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          username: ${{ secrets.HOST_USERNAME }}
-          server: ${{ secrets.HOST_SERVER_IP }}
-          password: ${{ secrets.HOST_PASSWORD }}
+          username: ${{ secrets.HOST_USERNAME_PROSTA }}
+          server: ${{ secrets.HOST_SERVER_IP_PROSTA }}
+          password: ${{ secrets.HOST_PASSWORD_PROSTA }}
           local_path: './build/libs/Message.jar'
-          remote_path: '/home/cergc/bots/CoreBot/build/libs'
+          remote_path: '/home/bots/message'
           sftpArgs: '-o ConnectTimeout=5'
