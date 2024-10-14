@@ -1,10 +1,17 @@
 apply plugin: 'java'
 
 project.ext.mainClassName = "corebot.CoreBot"
-sourceCompatibility = targetCompatibility = 16
 version = '1.0'
 
 compileJava.options.encoding = "UTF-8"
+
+
+// java{
+//     targetCompatibility = 8
+//     sourceCompatibility = JavaVersion.VERSION_17
+// }
+
+sourceCompatibility = targetCompatibility = 17
 
 sourceSets.main.java.srcDirs = ["src/"]
 allprojects{
@@ -13,17 +20,25 @@ allprojects{
         mavenCentral()
         maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven{ url 'https://jitpack.io' }
+        maven{ url 'https://www.jitpack.io' }
         maven{
             name 'm2-dv8tion'
             url 'https://m2.dv8tion.net/releases'
         }
+        maven{ url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
     }
 }
 
 ext{
     mindustryVersion = 'v146'
+    jabelVersion = "93fde537c7"
 }
+
+// allprojects{
+//     tasks.withType(JavaCompile){
+//         options.compilerArgs.addAll(['--release', '8'])
+//     }
+// }
 
 task dist(type: Jar){
     from files(sourceSets.main.output.classesDirs)
@@ -42,9 +57,20 @@ dependencies{
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
     implementation("net.dv8tion:JDA:5.0.0-alpha.10")
     implementation 'org.jsoup:jsoup:1.15.3'
-    implementation "com.github.Anuken.Arc:arc-core:152e49944"
-    implementation "com.github.Anuken.Mindustry:core:$mindustryVersion"
+    // implementation "com.github.anuken:arc:arc-core:152e49944a1de4653c6aa8c822b03915fcdf25ba"
+    // implementation "com.github.anuken.mindustry:core:v146"
     implementation "org.slf4j:slf4j-nop:1.7.31"
 
 //    implementation 'io.github.cdimascio:dotenv-java:3.0.0' // for .env support
+
+    compileOnly "com.github.anuken.arc:arc-core:v146"
+    compileOnly "com.github.anuken.mindustry:core:v146"
+}
+
+configurations.all{
+    resolutionStrategy.eachDependency { details ->
+        if(details.requested.group == 'com.github.Anuken.Arc'){
+            details.useVersion "$mindustryVersion"
+        }
+    }
 }
