@@ -32,7 +32,7 @@ jobs:
         run: mv ./build/libs/CoreBot.jar ./build/libs/Message.jar
 
       - name: Upload a Build Artifact To GitHub
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4
         with:
           path: build/libs/Message.jar
 
