@@ -190,7 +190,7 @@ public class Messages extends ListenerAdapter {
                 File mapFile = new File("cache/" + a.getFileName());
                 Fi imageFile = Fi.get("cache/image_" + a.getFileName().replace(".msav", ".png"));
                 Streams.copy(net.download(a.getUrl()), new FileOutputStream(mapFile));
-                ImageIO.write(map.image, "png", imageFile.file());
+                ImageIO.write((RenderedImage) map.image, "png", imageFile.file());
 
                 EmbedBuilder builder = new EmbedBuilder().setColor(normalColor).setColor(normalColor)
                         .setImage("attachment://" + imageFile.name())
