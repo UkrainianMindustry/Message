@@ -1,3 +1,4 @@
+package corebot;
 
 import arc.*;
 import arc.files.*;
@@ -215,7 +216,7 @@ public class ContentHandler{
     }
 
     public Schematic parseSchematicURL(String text) throws Exception{
-        return read(Main.net.download(text));
+        return read(CoreBot.net.download(text));
     }
 
     static Schematic read(InputStream input) throws IOException{
